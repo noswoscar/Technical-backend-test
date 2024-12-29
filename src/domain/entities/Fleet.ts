@@ -10,8 +10,12 @@ export class Fleet {
             this.vehicles = vehicles
       }
 
-      getFleetIdentity = () => {
-            return this.fleetIdentity
+      getFleetId = () => {
+            return this.fleetIdentity.id
+      }
+
+      getFleetName = () => {
+            return this.fleetIdentity.name
       }
 
       getVehicles = () => {
@@ -20,5 +24,18 @@ export class Fleet {
 
       setVehicle = (vehicle: Vehicle) => {
             this.vehicles.push(vehicle)
+      }
+
+      hasVehicle = (vehicle: Vehicle) => {
+            if (
+                  this.vehicles.find(
+                        (vehicleItem) =>
+                              vehicleItem.getVehicleId() ===
+                              vehicle.getVehicleId()
+                  )
+            ) {
+                  return true
+            }
+            return false
       }
 }

@@ -1,3 +1,4 @@
+import { ErrorLog } from '../domain/agregates/ErrorLog'
 import { Fleet } from '../domain/entities/Fleet'
 import { FleetIdentity } from '../valueObjects/FleetIdentity'
 import { Location } from '../domain/entities/Location'
@@ -8,11 +9,13 @@ import { VehicleIdentity } from '../valueObjects/VehicleIdentity'
 class ParkingApp {
       private fleets: Array<Fleet>
       private vehicles: Array<Vehicle>
+      private errorLog: ErrorLog
       //   private fleets: Array<Fleet> = []
       constructor() {
-            console.log('Started app')
+            console.log('Welcome to my parking app')
             this.fleets = []
             this.vehicles = []
+            this.errorLog = new ErrorLog()
             // this.createVehicle()
             // let vehicles: Array<Vehicle> = []
             // let flettIdentity: FleetIdentity = {
@@ -25,7 +28,14 @@ class ParkingApp {
 
       createFleet = (fleetIdentity: FleetIdentity) => {
             let fleet = new Fleet(fleetIdentity, [])
-            this.fleets.push(fleet)
+            if (
+                  !this.fleets.find(
+                        (fleetItem) =>
+                              fleetItem.getFleetId() === fleet.getFleetId()
+                  )
+            ) {
+                  this.fleets.push(fleet)
+            }
             return fleet
       }
       getFleets = () => {
@@ -33,7 +43,7 @@ class ParkingApp {
       }
       getFleet = (fleetName: string) => {
             return this.fleets.find(
-                  (fleet) => fleet.getFleetIdentity.name === fleetName
+                  (fleet) => fleet.getFleetName() === fleetName
             )
       }
 
@@ -47,16 +57,41 @@ class ParkingApp {
       registerVehicleToFleet = (vehicle: Vehicle, fleet: Fleet) => {
             let registryRequest: RegistryRequest = new RegistryRequest(
                   vehicle,
-                  fleet
+                  fleet,
+                  this.errorLog
             )
             registryRequest.registerVehicleToFleet()
       }
 
       verifyVehicleInFleet = (vehicle: Vehicle, fleet: Fleet) => {
-            if (fleet.getVehicles().includes(vehicle)) {
+            if (
+                  fleet
+                        .getVehicles()
+                        .find(
+                              (vehicleItem) =>
+                                    vehicleItem.getVehicleId() ===
+                                    vehicle.getVehicleId()
+                        )
+            ) {
                   return true
             }
             return false
+      }
+      userWasInformedOfRegistryError = (
+            vehicle: Vehicle,
+            fleet: Fleet,
+            time: string
+      ) => {
+            return this.errorLog.hasRegistryError(
+                  'RegistryError',
+                  vehicle,
+                  fleet,
+                  time
+            )
+      }
+
+      getErrorLog = () => {
+            return this.errorLog
       }
 }
 

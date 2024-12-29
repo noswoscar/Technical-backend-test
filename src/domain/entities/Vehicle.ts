@@ -8,4 +8,8 @@ export class Vehicle {
             this.vehicleIdentity = vehicleIdentity
             this.location = location
       }
+
+      getVehicleId = () => {
+            return this.vehicleIdentity.vehicleId
+      }
 }

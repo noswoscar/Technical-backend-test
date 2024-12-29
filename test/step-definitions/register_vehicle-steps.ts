@@ -14,6 +14,7 @@ let vehicle: Vehicle
 
 Given('my fleet', function () {
       let fleetIdentity: FleetIdentity = {
+            id: 1,
             name: 'Oscars',
             owner: 'Oscar',
       }
@@ -36,6 +37,30 @@ Then('this vehicle should be part of my vehicle fleet', function () {
       assert.strictEqual(app.verifyVehicleInFleet(vehicle, fleet), true)
 })
 
+Given('I have registered this vehicle into my fleet', function () {
+      let vehicleInFleet = app.verifyVehicleInFleet(vehicle, fleet)
+      if (!vehicleInFleet) {
+            app.registerVehicleToFleet(vehicle, fleet)
+      }
+      assert.strictEqual(app.verifyVehicleInFleet(vehicle, fleet), true)
+})
+
+When('I try to register this vehicle into my fleet', function () {
+      app.registerVehicleToFleet(vehicle, fleet)
+})
+
+Then(
+      'I should be informed this this vehicle has already been registered into my fleet',
+      function () {
+            let userInformed = app.userWasInformedOfRegistryError(
+                  vehicle,
+                  fleet,
+                  'now'
+            )
+            assert.strictEqual(userInformed, true)
+      }
+)
+
 // Given('the fleet of another user', function () {
 //       // const hectorFleet = app.findFleetByName('Hectors')
 // })
@@ -44,24 +69,5 @@ Then('this vehicle should be part of my vehicle fleet', function () {
 //       "this vehicle has been registered into the other user's fleet",
 //       function () {
 //             // app.registerVehicleToFleet(vehicle, 'Hectors')
-//       }
-// )
-
-// Given('I have registered this vehicle into my fleet', function () {
-//       // // console.log('my fleet', app.findFleetByName('Oscars'))
-//       // // assert.equal(app.vehicleInFleet(vehicle, 'Oscars'), true)
-//       // const myFleet = app.findFleetByName('Oscars')
-//       // myFleet.vehicles.push(vehicle)
-//       // assert.equal(myFleet.vehicles.includes(vehicle), true)
-// })
-
-// When('I try to register this vehicle into my fleet', function () {
-//       // app.registerVehicleToFleet(vehicle, 'Oscars')
-// })
-
-// Then(
-//       'I should be informed this this vehicle has already been registered into my fleet',
-//       function () {
-//             // assert.equal(app.informedUserVehicleAllreadyRegistered, true)
 //       }
 // )

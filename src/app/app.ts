@@ -2,6 +2,7 @@ import { ErrorLog } from '../domain/agregates/ErrorLog'
 import { Fleet } from '../domain/entities/Fleet'
 import { FleetIdentity } from '../valueObjects/FleetIdentity'
 import { Location } from '../domain/entities/Location'
+import { ParkingRequest } from '../domain/agregates/ParkingRequest'
 import { ProgramError } from '../domain/entities/ProgramError'
 import { RegistryRequest } from '../domain/agregates/RegistryRequest'
 import { Vehicle } from '../domain/entities/Vehicle'
@@ -12,21 +13,12 @@ class ParkingApp {
       private locations: Array<Location>
       private vehicles: Array<Vehicle>
       private errorLog: ErrorLog
-      //   private fleets: Array<Fleet> = []
       constructor() {
             console.log('Welcome to my parking app')
             this.fleets = []
             this.vehicles = []
             this.locations = []
             this.errorLog = new ErrorLog()
-            // this.createVehicle()
-            // let vehicles: Array<Vehicle> = []
-            // let flettIdentity: FleetIdentity = {
-            //       name: 'Oscars',
-            //       owner: 'oscar',
-            // }
-            // let fleet = new Fleet(flettIdentity, vehicles)
-            // console.log('I have a fleet :', fleet)
       }
 
       createFleet = (fleetIdentity: FleetIdentity) => {
@@ -44,7 +36,7 @@ class ParkingApp {
       getFleets = () => {
             return this.fleets
       }
-      getFleet = (fleetName: string) => {
+      getFleet = (fleetName: string): Fleet | undefined => {
             return this.fleets.find(
                   (fleet) => fleet.getFleetName() === fleetName
             )
@@ -60,8 +52,7 @@ class ParkingApp {
       registerVehicleToFleet = (vehicle: Vehicle, fleet: Fleet) => {
             let registryRequest: RegistryRequest = new RegistryRequest(
                   vehicle,
-                  fleet,
-                  this.errorLog
+                  fleet
             )
             try {
                   registryRequest.registerVehicleToFleet()
@@ -95,8 +86,32 @@ class ParkingApp {
             return location
       }
 
+      getLocations = () => {
+            return this.locations
+      }
+
       getErrorLog = () => {
             return this.errorLog
+      }
+
+      parkVehicleAtLocation = (vehicle: Vehicle, location: Location) => {
+            let parkingRequest = new ParkingRequest(vehicle, location)
+            try {
+                  parkingRequest.parkVehicle()
+            } catch (error: any) {
+                  let myerror = new ProgramError('ParkingError', error.message)
+                  this.errorLog.setError(myerror)
+                  this.errorLog.logError(myerror)
+            } finally {
+                  return
+            }
+      }
+
+      verifyLocation = (vehicle: Vehicle, location: Location): boolean => {
+            if (vehicle.getLocation().getId() === location.getId()) {
+                  return true
+            }
+            return false
       }
 }
 

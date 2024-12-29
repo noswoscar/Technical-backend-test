@@ -2,12 +2,10 @@ import { Given, Then, When } from '@cucumber/cucumber'
 
 import { Fleet } from '../../src/domain/entities/Fleet'
 import { FleetIdentity } from '../../src/valueObjects/FleetIdentity'
-import ParkingApp from '../../src/app/app'
 import { Vehicle } from '../../src/domain/entities/Vehicle'
 import { VehicleIdentity } from '../../src/valueObjects/VehicleIdentity'
+import app from '../../src/app/app'
 import assert from 'assert'
-
-let app = new ParkingApp()
 
 let createId = () => {
       return (

@@ -9,6 +9,7 @@ import { VehicleIdentity } from '../valueObjects/VehicleIdentity'
 
 class ParkingApp {
       private fleets: Array<Fleet>
+      private locations: Array<Location>
       private vehicles: Array<Vehicle>
       private errorLog: ErrorLog
       //   private fleets: Array<Fleet> = []
@@ -16,6 +17,7 @@ class ParkingApp {
             console.log('Welcome to my parking app')
             this.fleets = []
             this.vehicles = []
+            this.locations = []
             this.errorLog = new ErrorLog()
             // this.createVehicle()
             // let vehicles: Array<Vehicle> = []
@@ -87,9 +89,17 @@ class ParkingApp {
             return false
       }
 
+      createLocation = (): Location => {
+            let location = new Location()
+            this.locations.push(location)
+            return location
+      }
+
       getErrorLog = () => {
             return this.errorLog
       }
 }
 
-export default ParkingApp
+const app = new ParkingApp()
+
+export default app

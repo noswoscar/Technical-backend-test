@@ -9,12 +9,20 @@ import assert from 'assert'
 
 let app = new ParkingApp()
 
+let createId = () => {
+      return (
+            new Date().getTime().toString(36) +
+            Math.random().toString(36).slice(2)
+      )
+}
+
 let fleet: Fleet
+let otherfleet: Fleet
 let vehicle: Vehicle
 
 Given('my fleet', function () {
       let fleetIdentity: FleetIdentity = {
-            id: 1,
+            id: createId(),
             name: 'Oscars',
             owner: 'Oscar',
       }
@@ -24,7 +32,7 @@ Given('my fleet', function () {
 Given('a vehicle', function () {
       let vehicleIdentity: VehicleIdentity = {
             vehicleName: 'peugeot',
-            vehicleId: 1,
+            vehicleId: createId(),
       }
       vehicle = app.createVehicle(vehicleIdentity)
 })
@@ -52,22 +60,29 @@ When('I try to register this vehicle into my fleet', function () {
 Then(
       'I should be informed this this vehicle has already been registered into my fleet',
       function () {
-            let userInformed = app.userWasInformedOfRegistryError(
-                  vehicle,
-                  fleet,
-                  'now'
+            assert.strictEqual(
+                  app.getErrorLog().hasRecentRegistryError(Date.now()),
+                  true
             )
-            assert.strictEqual(userInformed, true)
       }
 )
 
-// Given('the fleet of another user', function () {
-//       // const hectorFleet = app.findFleetByName('Hectors')
-// })
+Given('the fleet of another user', function () {
+      let fleetIdentity: FleetIdentity = {
+            id: createId(),
+            name: 'Hectors',
+            owner: 'Hector',
+      }
+      otherfleet = app.createFleet(fleetIdentity)
+})
 
-// Given(
-//       "this vehicle has been registered into the other user's fleet",
-//       function () {
-//             // app.registerVehicleToFleet(vehicle, 'Hectors')
-//       }
-// )
+Given(
+      "this vehicle has been registered into the other user's fleet",
+      function () {
+            app.registerVehicleToFleet(vehicle, otherfleet)
+            assert.strictEqual(
+                  app.verifyVehicleInFleet(vehicle, otherfleet),
+                  true
+            )
+      }
+)

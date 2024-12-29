@@ -1,5 +1,5 @@
 export interface FleetIdentity {
-      id: number
+      id: string
       name: string
       owner: string
 }

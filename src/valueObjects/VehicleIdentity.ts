@@ -1,4 +1,4 @@
 export interface VehicleIdentity {
       vehicleName: string
-      vehicleId: number
+      vehicleId: string
 }

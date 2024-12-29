@@ -6,6 +6,7 @@ import { FleetIdentity } from '../../src/valueObjects/FleetIdentity'
 import { Location } from '../../src/domain/entities/Location'
 import { Vehicle } from '../../src/domain/entities/Vehicle'
 import { VehicleIdentity } from '../../src/valueObjects/VehicleIdentity'
+import { VehicleType } from '../../src/valueObjects/VehicleType'
 import app from '../../src/app/app'
 import assert from 'assert'
 
@@ -38,7 +39,7 @@ Given('a vehicle', function () {
             vehicleName: 'peugeot',
             vehicleId: createId(),
       }
-      vehicle = app.createVehicle(vehicleIdentity)
+      vehicle = app.createVehicle(vehicleIdentity, VehicleType.Car)
 })
 
 When('I register this vehicle into my fleet', function () {

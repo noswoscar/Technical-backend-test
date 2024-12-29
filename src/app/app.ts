@@ -7,6 +7,7 @@ import { ProgramError } from '../domain/entities/ProgramError'
 import { RegistryRequest } from '../domain/agregates/RegistryRequest'
 import { Vehicle } from '../domain/entities/Vehicle'
 import { VehicleIdentity } from '../valueObjects/VehicleIdentity'
+import { VehicleType } from '../valueObjects/VehicleType'
 
 class ParkingApp {
       private fleets: Array<Fleet>
@@ -42,9 +43,12 @@ class ParkingApp {
             )
       }
 
-      createVehicle = (vehicleIdentity: VehicleIdentity) => {
+      createVehicle = (
+            vehicleIdentity: VehicleIdentity,
+            vehicleType: VehicleType
+      ) => {
             let location = new Location()
-            let vehicle = new Vehicle(vehicleIdentity, location)
+            let vehicle = new Vehicle(vehicleIdentity, location, vehicleType)
             this.vehicles.push(vehicle)
             return vehicle
       }

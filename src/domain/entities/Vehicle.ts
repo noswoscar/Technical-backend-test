@@ -12,4 +12,12 @@ export class Vehicle {
       getVehicleId = () => {
             return this.vehicleIdentity.vehicleId
       }
+
+      setLocation = (location: Location) => {
+            this.location = location
+      }
+
+      getLocation = () => {
+            return this.location
+      }
 }

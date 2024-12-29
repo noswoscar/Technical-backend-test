@@ -2,6 +2,7 @@ import { ErrorLog } from '../domain/agregates/ErrorLog'
 import { Fleet } from '../domain/entities/Fleet'
 import { FleetIdentity } from '../valueObjects/FleetIdentity'
 import { Location } from '../domain/entities/Location'
+import { ProgramError } from '../domain/entities/ProgramError'
 import { RegistryRequest } from '../domain/agregates/RegistryRequest'
 import { Vehicle } from '../domain/entities/Vehicle'
 import { VehicleIdentity } from '../valueObjects/VehicleIdentity'
@@ -60,7 +61,15 @@ class ParkingApp {
                   fleet,
                   this.errorLog
             )
-            registryRequest.registerVehicleToFleet()
+            try {
+                  registryRequest.registerVehicleToFleet()
+            } catch (error: any) {
+                  let myerror = new ProgramError('RegistryError', error.message)
+                  this.errorLog.setError(myerror)
+                  this.errorLog.logError(myerror)
+            } finally {
+                  return
+            }
       }
 
       verifyVehicleInFleet = (vehicle: Vehicle, fleet: Fleet) => {
@@ -76,18 +85,6 @@ class ParkingApp {
                   return true
             }
             return false
-      }
-      userWasInformedOfRegistryError = (
-            vehicle: Vehicle,
-            fleet: Fleet,
-            time: string
-      ) => {
-            return this.errorLog.hasRegistryError(
-                  'RegistryError',
-                  vehicle,
-                  fleet,
-                  time
-            )
       }
 
       getErrorLog = () => {

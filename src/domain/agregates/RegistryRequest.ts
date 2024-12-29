@@ -1,4 +1,4 @@
-import { Error } from '../entities/Error'
+// import { Error } from '../entities/Error'
 import { ErrorLog } from './ErrorLog'
 import { Fleet } from '../entities/Fleet'
 import { Vehicle } from '../entities/Vehicle'
@@ -19,9 +19,7 @@ export class RegistryRequest {
                         this.vehicle.getVehicleId() +
                         ' has already been registered into the fleet number ' +
                         this.fleet.getFleetId()
-                  let error = new Error('RegistryError', errorMessage)
-                  this.errorLog.setError(error)
-                  this.errorLog.logError(error)
+                  throw new Error(errorMessage)
             } else {
                   this.fleet.setVehicle(this.vehicle)
             }

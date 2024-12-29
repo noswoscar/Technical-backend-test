@@ -35,4 +35,20 @@ export class ErrorLog {
             }
             return false
       }
+      hasRecentParkingError = (time: number): boolean => {
+            if (
+                  this.errors.find((errorItem: ProgramError) => {
+                        if (
+                              errorItem.errorType === 'ParkingError' &&
+                              diff(errorItem.errorTime, time) < 50
+                        ) {
+                              return true
+                        }
+                        return false
+                  })
+            ) {
+                  return true
+            }
+            return false
+      }
 }

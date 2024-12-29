@@ -1,6 +1,9 @@
 {
       "default": {
-            "paths": ["test/features/register_vehicle.feature"],
+            "paths": [
+                  "test/features/register_vehicle.feature",
+                  "test/features/park_vehicle.feature"
+            ],
             "publishQuiet": true,
             "require": ["test/step-definitions/*.ts"],
             "requireModule": ["ts-node/register"]

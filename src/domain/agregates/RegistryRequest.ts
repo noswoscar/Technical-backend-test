@@ -6,11 +6,9 @@ import { Vehicle } from '../entities/Vehicle'
 export class RegistryRequest {
       private vehicle: Vehicle
       private fleet: Fleet
-      private errorLog: ErrorLog
-      constructor(vehicle: Vehicle, fleet: Fleet, errorLog: ErrorLog) {
+      constructor(vehicle: Vehicle, fleet: Fleet) {
             this.vehicle = vehicle
             this.fleet = fleet
-            this.errorLog = errorLog
       }
       registerVehicleToFleet = () => {
             if (this.fleet.hasVehicle(this.vehicle)) {

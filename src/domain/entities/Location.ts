@@ -11,8 +11,9 @@ export class Location {
                   new Date().getTime().toString(36) +
                   Math.random().toString(36).slice(2)
             this.coordinates = {
-                  latitude: Math.random() * (60 - 0) + 0,
-                  longitude: Math.random() * (60 - 0) + 0,
+                  latitude: Math.floor(Math.random() * (90 - (-90 + 1))) - 90,
+                  longitude:
+                        Math.floor(Math.random() * (180 - (-180 + 1))) - 180,
             }
             this.free = true
             this.parkedVehicle = undefined

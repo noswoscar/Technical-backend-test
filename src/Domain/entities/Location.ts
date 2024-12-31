@@ -1,4 +1,4 @@
-import { Coordinates } from '../../valueObjects/Coordinates'
+import { Coordinates } from '../valueObjects/Coordinates'
 import { Vehicle } from './Vehicle'
 
 export class Location {

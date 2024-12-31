@@ -1,9 +1,9 @@
-import { DIContainer } from '../../../app/DIContainer'
-import { Location } from '../../entities/Location'
-import ParkingApp from '../../../app/app'
-import { Vehicle } from '../../entities/Vehicle'
-import { VehicleIdentity } from '../../../valueObjects/VehicleIdentity'
-import { VehicleType } from '../../../valueObjects/VehicleType'
+import { DIContainer } from '../../DIContainer'
+import { Location } from '../../../Domain/entities/Location'
+import ParkingApp from '../../app'
+import { Vehicle } from '../../../Domain/entities/Vehicle'
+import { VehicleIdentity } from '../../../Domain/valueObjects/VehicleIdentity'
+import { VehicleType } from '../../../Domain/valueObjects/VehicleType'
 
 export class CreateVehicle {
       execute(

@@ -1,4 +1,4 @@
-import { FleetIdentity } from '../../valueObjects/FleetIdentity'
+import { FleetIdentity } from '../valueObjects/FleetIdentity'
 import { Vehicle } from './Vehicle'
 
 export class Fleet {

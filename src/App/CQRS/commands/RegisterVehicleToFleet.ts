@@ -1,9 +1,9 @@
-import { DIContainer } from '../../../app/DIContainer'
-import { Fleet } from '../../entities/Fleet'
-import ParkingApp from '../../../app/app'
-import { ProgramError } from '../../entities/ProgramError'
-import { RegistryRequest } from '../../agregates/RegistryRequest'
-import { Vehicle } from '../../entities/Vehicle'
+import { DIContainer } from '../../DIContainer'
+import { Fleet } from '../../../Domain/entities/Fleet'
+import ParkingApp from '../../app'
+import { ProgramError } from '../../../Domain/entities/ProgramError'
+import { RegistryRequest } from '../../../Domain/agregates/RegistryRequest'
+import { Vehicle } from '../../../Domain/entities/Vehicle'
 
 export class registerVehicleToFleet {
       execute(vehicle: Vehicle, fleet: Fleet) {

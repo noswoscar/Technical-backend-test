@@ -1,7 +1,7 @@
-import { DIContainer } from '../../../app/DIContainer'
-import { Fleet } from '../../entities/Fleet'
-import { FleetIdentity } from '../../../valueObjects/FleetIdentity'
-import ParkingApp from '../../../app/app'
+import { DIContainer } from '../../DIContainer'
+import { Fleet } from '../../../Domain/entities/Fleet'
+import { FleetIdentity } from '../../../Domain/valueObjects/FleetIdentity'
+import ParkingApp from '../../app'
 
 export class CreateFleet {
       execute(fleetIdentity: FleetIdentity): Fleet {

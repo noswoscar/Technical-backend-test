@@ -1,14 +1,13 @@
 import { Given, Then, When } from '@cucumber/cucumber'
 
-import { DIContainer } from '../../src/app/DIContainer'
-import { ErrorLog } from '../../src/domain/agregates/ErrorLog'
-import { Fleet } from '../../src/domain/entities/Fleet'
-import { FleetIdentity } from '../../src/valueObjects/FleetIdentity'
-import { Location } from '../../src/domain/entities/Location'
-import ParkingApp from '../../src/app/app'
-import { Vehicle } from '../../src/domain/entities/Vehicle'
-import { VehicleIdentity } from '../../src/valueObjects/VehicleIdentity'
-import { VehicleType } from '../../src/valueObjects/VehicleType'
+import { DIContainer } from '../../src/App/DIContainer'
+import { Fleet } from '../../src/Domain/entities/Fleet'
+import { FleetIdentity } from '../../src/Domain/valueObjects/FleetIdentity'
+import { Location } from '../../src/Domain/entities/Location'
+import ParkingApp from '../../src/App/app'
+import { Vehicle } from '../../src/Domain/entities/Vehicle'
+import { VehicleIdentity } from '../../src/Domain/valueObjects/VehicleIdentity'
+import { VehicleType } from '../../src/Domain/valueObjects/VehicleType'
 import assert from 'assert'
 
 let createId = () => {

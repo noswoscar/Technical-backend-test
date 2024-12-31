@@ -1,6 +1,6 @@
 import { Location } from './Location'
-import { VehicleIdentity } from '../../valueObjects/VehicleIdentity'
-import { VehicleType } from '../../valueObjects/VehicleType'
+import { VehicleIdentity } from '../valueObjects/VehicleIdentity'
+import { VehicleType } from '../valueObjects/VehicleType'
 
 export class Vehicle {
       private vehicleIdentity: VehicleIdentity

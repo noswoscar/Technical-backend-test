@@ -1,9 +1,9 @@
-import { DIContainer } from '../../../app/DIContainer'
-import { Location } from '../../entities/Location'
-import ParkingApp from '../../../app/app'
-import { ParkingRequest } from '../../agregates/ParkingRequest'
-import { ProgramError } from '../../entities/ProgramError'
-import { Vehicle } from '../../entities/Vehicle'
+import { DIContainer } from '../../DIContainer'
+import { Location } from '../../../Domain/entities/Location'
+import ParkingApp from '../../app'
+import { ParkingRequest } from '../../../Domain/agregates/ParkingRequest'
+import { ProgramError } from '../../../Domain/entities/ProgramError'
+import { Vehicle } from '../../../Domain/entities/Vehicle'
 
 export class ParkVehicleAtLocation {
       execute(vehicle: Vehicle, location: Location) {

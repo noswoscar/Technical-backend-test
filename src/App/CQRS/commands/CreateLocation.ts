@@ -1,6 +1,6 @@
-import { DIContainer } from '../../../app/DIContainer'
-import { Location } from '../../entities/Location'
-import ParkingApp from '../../../app/app'
+import { DIContainer } from '../../DIContainer'
+import { Location } from '../../../Domain/entities/Location'
+import ParkingApp from '../../app'
 
 export class CreateLocation {
       execute(): Location {

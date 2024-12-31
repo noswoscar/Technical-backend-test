@@ -1,13 +1,14 @@
 import { Given, Then, When } from '@cucumber/cucumber'
 
+import { DIContainer } from '../../src/app/DIContainer'
 import { ErrorLog } from '../../src/domain/agregates/ErrorLog'
 import { Fleet } from '../../src/domain/entities/Fleet'
 import { FleetIdentity } from '../../src/valueObjects/FleetIdentity'
 import { Location } from '../../src/domain/entities/Location'
+import ParkingApp from '../../src/app/app'
 import { Vehicle } from '../../src/domain/entities/Vehicle'
 import { VehicleIdentity } from '../../src/valueObjects/VehicleIdentity'
 import { VehicleType } from '../../src/valueObjects/VehicleType'
-import app from '../../src/app/app'
 import assert from 'assert'
 
 let createId = () => {
@@ -19,7 +20,8 @@ let createId = () => {
 
 //i need to init fleet and vehicle variables for park vehicle to be run first but I am creating them in register vehicle
 //Solution: use the app to follow the story of the first vehicle, my_vehicle my_fleet, other_fleet, the location
-
+const parkingApp = new ParkingApp()
+const app = DIContainer.resolve<ParkingApp>('app')
 let location: Location
 let fleet: Fleet
 let otherfleet: Fleet
@@ -103,13 +105,16 @@ When('I park my vehicle at this location', function () {
 Then(
       'the known location of my vehicle should verify this location',
       function () {
-            assert.strictEqual(app.verifyLocation(vehicle, location), true)
+            assert.strictEqual(
+                  app.verifyVehicleAtLocation(vehicle, location),
+                  true
+            )
       }
 )
 
 Given('my vehicle has been parked into this location', function () {
       app.parkVehicleAtLocation(vehicle, location)
-      assert.strictEqual(app.verifyLocation(vehicle, location), true)
+      assert.strictEqual(app.verifyVehicleAtLocation(vehicle, location), true)
 })
 
 When('I try to park my vehicle at this location', function () {

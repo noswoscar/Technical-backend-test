@@ -1,13 +1,16 @@
+import { CreateFleet } from '../domain/CQRS/commands/CreateFleet'
+import { CreateLocation } from '../domain/CQRS/commands/CreateLocation'
+import { CreateVehicle } from '../domain/CQRS/commands/CreateVehicle'
+import { DIContainer } from './DIContainer'
 import { ErrorLog } from '../domain/agregates/ErrorLog'
 import { Fleet } from '../domain/entities/Fleet'
 import { FleetIdentity } from '../valueObjects/FleetIdentity'
 import { Location } from '../domain/entities/Location'
-import { ParkingRequest } from '../domain/agregates/ParkingRequest'
-import { ProgramError } from '../domain/entities/ProgramError'
-import { RegistryRequest } from '../domain/agregates/RegistryRequest'
+import { ParkVehicleAtLocation } from '../domain/CQRS/commands/ParkVehicleAtLocation'
 import { Vehicle } from '../domain/entities/Vehicle'
 import { VehicleIdentity } from '../valueObjects/VehicleIdentity'
 import { VehicleType } from '../valueObjects/VehicleType'
+import { registerVehicleToFleet } from '../domain/CQRS/commands/RegisterVehicleToFleet'
 
 class ParkingApp {
       private fleets: Array<Fleet>
@@ -20,20 +23,43 @@ class ParkingApp {
             this.vehicles = []
             this.locations = []
             this.errorLog = new ErrorLog()
+            DIContainer.register('app', this)
       }
 
+      //commands
+      //fleet methods
       createFleet = (fleetIdentity: FleetIdentity) => {
-            let fleet = new Fleet(fleetIdentity, [])
-            if (
-                  !this.fleets.find(
-                        (fleetItem) =>
-                              fleetItem.getFleetId() === fleet.getFleetId()
-                  )
-            ) {
-                  this.fleets.push(fleet)
-            }
-            return fleet
+            const createFleetHandler = new CreateFleet()
+            return createFleetHandler.execute(fleetIdentity) // no need to pass the app explicitly
       }
+
+      //vehicle methods
+      createVehicle = (
+            vehicleIdentity: VehicleIdentity,
+            vehicleType: VehicleType
+      ) => {
+            const createVehicleHandler = new CreateVehicle()
+            return createVehicleHandler.execute(vehicleIdentity, vehicleType)
+      }
+
+      registerVehicleToFleet = (vehicle: Vehicle, fleet: Fleet) => {
+            const registerVehicleToFleetHandler = new registerVehicleToFleet()
+            return registerVehicleToFleetHandler.execute(vehicle, fleet)
+      }
+
+      parkVehicleAtLocation = (vehicle: Vehicle, location: Location) => {
+            const parkVehicleAtLocationHandler = new ParkVehicleAtLocation()
+            return parkVehicleAtLocationHandler.execute(vehicle, location)
+      }
+
+      //location methods
+      createLocation = (): Location => {
+            const createLocationHandler = new CreateLocation()
+            return createLocationHandler.execute()
+      }
+
+      //queries
+      //fleet queries
       getFleets = () => {
             return this.fleets
       }
@@ -43,32 +69,10 @@ class ParkingApp {
             )
       }
 
-      createVehicle = (
-            vehicleIdentity: VehicleIdentity,
-            vehicleType: VehicleType
-      ) => {
-            let location = new Location()
-            let vehicle = new Vehicle(vehicleIdentity, location, vehicleType)
-            this.vehicles.push(vehicle)
-            return vehicle
+      //vehicle queries
+      getVehicles = () => {
+            return this.vehicles
       }
-
-      registerVehicleToFleet = (vehicle: Vehicle, fleet: Fleet) => {
-            let registryRequest: RegistryRequest = new RegistryRequest(
-                  vehicle,
-                  fleet
-            )
-            try {
-                  registryRequest.registerVehicleToFleet()
-            } catch (error: any) {
-                  let myerror = new ProgramError('RegistryError', error.message)
-                  this.errorLog.setError(myerror)
-                  this.errorLog.logError(myerror)
-            } finally {
-                  return
-            }
-      }
-
       verifyVehicleInFleet = (vehicle: Vehicle, fleet: Fleet) => {
             if (
                   fleet
@@ -83,42 +87,25 @@ class ParkingApp {
             }
             return false
       }
-
-      createLocation = (): Location => {
-            let location = new Location()
-            this.locations.push(location)
-            return location
-      }
-
-      getLocations = () => {
-            return this.locations
-      }
-
-      getErrorLog = () => {
-            return this.errorLog
-      }
-
-      parkVehicleAtLocation = (vehicle: Vehicle, location: Location) => {
-            let parkingRequest = new ParkingRequest(vehicle, location)
-            try {
-                  parkingRequest.parkVehicle()
-            } catch (error: any) {
-                  let myerror = new ProgramError('ParkingError', error.message)
-                  this.errorLog.setError(myerror)
-                  this.errorLog.logError(myerror)
-            } finally {
-                  return
-            }
-      }
-
-      verifyLocation = (vehicle: Vehicle, location: Location): boolean => {
+      verifyVehicleAtLocation = (
+            vehicle: Vehicle,
+            location: Location
+      ): boolean => {
             if (vehicle.getLocation().getId() === location.getId()) {
                   return true
             }
             return false
       }
+
+      //location queries
+      getLocations = () => {
+            return this.locations
+      }
+
+      //errorlog queries
+      getErrorLog = () => {
+            return this.errorLog
+      }
 }
 
-const app = new ParkingApp()
-
-export default app
+export default ParkingApp

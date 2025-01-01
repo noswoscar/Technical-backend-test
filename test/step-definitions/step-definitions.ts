@@ -3,43 +3,27 @@ import { Given, Then, When } from '@cucumber/cucumber'
 import { DIContainer } from '../../src/App/DIContainer'
 import { Fleet } from '../../src/Domain/entities/Fleet'
 import { FleetIdentity } from '../../src/Domain/valueObjects/FleetIdentity'
-import { Location } from '../../src/Domain/entities/Location'
 import ParkingApp from '../../src/App/app'
 import { Vehicle } from '../../src/Domain/entities/Vehicle'
 import { VehicleIdentity } from '../../src/Domain/valueObjects/VehicleIdentity'
+import { VehicleLocation } from '../../src/Domain/entities/VehicleLocation'
 import { VehicleType } from '../../src/Domain/valueObjects/VehicleType'
 import assert from 'assert'
 
-let createId = () => {
-      return (
-            new Date().getTime().toString(36) +
-            Math.random().toString(36).slice(2)
-      )
-}
-
-//i need to init fleet and vehicle variables for park vehicle to be run first but I am creating them in register vehicle
-//Solution: use the app to follow the story of the first vehicle, my_vehicle my_fleet, other_fleet, the location
 const parkingApp = new ParkingApp()
 const app = DIContainer.resolve<ParkingApp>('app')
-let location: Location
+let location: VehicleLocation
 let fleet: Fleet
 let otherfleet: Fleet
 let vehicle: Vehicle
 
 Given('my fleet', function () {
-      let fleetIdentity: FleetIdentity = {
-            id: createId(),
-            name: 'Oscars',
-            owner: 'Oscar',
-      }
+      let fleetIdentity: FleetIdentity = new FleetIdentity('Oscar')
       fleet = app.createFleet(fleetIdentity)
 })
 
 Given('a vehicle', function () {
-      let vehicleIdentity: VehicleIdentity = {
-            vehicleName: 'peugeot',
-            vehicleId: createId(),
-      }
+      let vehicleIdentity: VehicleIdentity = new VehicleIdentity('XQ-672-81')
       vehicle = app.createVehicle(vehicleIdentity, VehicleType.Car)
 })
 
@@ -74,11 +58,7 @@ Then(
 )
 
 Given('the fleet of another user', function () {
-      let fleetIdentity: FleetIdentity = {
-            id: createId(),
-            name: 'Hectors',
-            owner: 'Hector',
-      }
+      let fleetIdentity: FleetIdentity = new FleetIdentity('Oscar')
       otherfleet = app.createFleet(fleetIdentity)
 })
 
@@ -94,7 +74,7 @@ Given(
 )
 
 Given('a location', function () {
-      location = app.createLocation()
+      location = app.createLocation('12', '-60', '1000')
 })
 
 When('I park my vehicle at this location', function () {

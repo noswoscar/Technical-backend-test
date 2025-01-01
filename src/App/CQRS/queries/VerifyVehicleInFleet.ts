@@ -11,8 +11,8 @@ export class VerifyVehicleInFleet {
                         .getVehicles()
                         .find(
                               (vehicleItem) =>
-                                    vehicleItem.getVehicleId() ===
-                                    vehicle.getVehicleId()
+                                    vehicleItem.getVehicleNumberPlate() ===
+                                    vehicle.getVehicleNumberPlate()
                         )
             ) {
                   return true

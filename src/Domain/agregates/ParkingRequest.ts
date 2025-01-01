@@ -1,32 +1,31 @@
-import { Location } from '../entities/Location'
 import { Vehicle } from '../entities/Vehicle'
+import { VehicleLocation } from '../entities/VehicleLocation'
 
 export class ParkingRequest {
       private vehicle: Vehicle
-      private location: Location
-      constructor(vehicle: Vehicle, location: Location) {
+      private location: VehicleLocation
+      constructor(vehicle: Vehicle, location: VehicleLocation) {
             this.vehicle = vehicle
             this.location = location
       }
 
-      //rules
-      verifyLocationIsFree = () => {
-            if (this.location.isFree()) {
-                  return true
-            }
-            return false
-      }
-
       parkVehicle = () => {
-            if (this.vehicle.getLocation().getId() === this.location.getId()) {
+            if (this.vehicle.getLocation() === this.location) {
+                  //replae with thourough verify {
                   let errorMessage =
                         'the vehicle number ' +
-                        this.vehicle.getVehicleId() +
-                        ' is already parked at the location ' +
-                        this.location.getId()
+                        this.vehicle.getVehicleNumberPlate() +
+                        ' is already parked at the location (' +
+                        this.location.getCoordinates().latitude +
+                        ' , ' +
+                        this.location.getCoordinates().longitude +
+                        ' , ' +
+                        this.location.getCoordinates().altitude +
+                        ')'
+
                   throw new Error(errorMessage)
             }
-            this.location.setParkedVehicle(this.vehicle)
+            // this.location.setParkedVehicle(this.vehicle)
             this.vehicle.setLocation(this.location)
       }
 }

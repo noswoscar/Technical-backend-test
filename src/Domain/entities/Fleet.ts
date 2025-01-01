@@ -11,11 +11,11 @@ export class Fleet {
       }
 
       getFleetId = () => {
-            return this.fleetIdentity.id
+            return this.fleetIdentity.getId()
       }
 
       getFleetName = () => {
-            return this.fleetIdentity.name
+            return this.fleetIdentity.getUserName()
       }
 
       getVehicles = () => {
@@ -30,8 +30,8 @@ export class Fleet {
             if (
                   this.vehicles.find(
                         (vehicleItem) =>
-                              vehicleItem.getVehicleId() ===
-                              vehicle.getVehicleId()
+                              vehicleItem.getVehicleNumberPlate() ===
+                              vehicle.getVehicleNumberPlate()
                   )
             ) {
                   return true

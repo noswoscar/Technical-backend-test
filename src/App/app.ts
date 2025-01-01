@@ -5,10 +5,10 @@ import { DIContainer } from './DIContainer'
 import { ErrorLog } from '../Domain/agregates/ErrorLog'
 import { Fleet } from '../Domain/entities/Fleet'
 import { FleetIdentity } from '../Domain/valueObjects/FleetIdentity'
-import { Location } from '../Domain/entities/Location'
 import { ParkVehicleAtLocation } from './CQRS/commands/ParkVehicleAtLocation'
 import { Vehicle } from '../Domain/entities/Vehicle'
 import { VehicleIdentity } from '../Domain/valueObjects/VehicleIdentity'
+import { VehicleLocation } from '../Domain/entities/VehicleLocation'
 import { VehicleType } from '../Domain/valueObjects/VehicleType'
 import { VerifyVehicleAtLocation } from './CQRS/queries/VerifyVehicleAtLocation'
 import { VerifyVehicleInFleet } from './CQRS/queries/VerifyVehicleInFleet'
@@ -16,7 +16,7 @@ import { registerVehicleToFleet } from './CQRS/commands/RegisterVehicleToFleet'
 
 class ParkingApp {
       private fleets: Array<Fleet>
-      private locations: Array<Location>
+      private locations: Array<VehicleLocation>
       private vehicles: Array<Vehicle>
       private errorLog: ErrorLog
       constructor() {
@@ -32,16 +32,14 @@ class ParkingApp {
       //fleet methods
       createFleet = (fleetIdentity: FleetIdentity) => {
             const createFleetHandler = new CreateFleet()
-            return createFleetHandler.execute(fleetIdentity) // no need to pass the app explicitly
+            return createFleetHandler.execute(fleetIdentity)
       }
 
       getFleets = () => {
             return this.fleets
       }
-      getFleet = (fleetName: string): Fleet | undefined => {
-            return this.fleets.find(
-                  (fleet) => fleet.getFleetName() === fleetName
-            )
+      getFleet = (fleetId: string): Fleet | undefined => {
+            return this.fleets.find((fleet) => fleet.getFleetId() === fleetId)
       }
 
       //vehicle methods
@@ -58,7 +56,7 @@ class ParkingApp {
             return registerVehicleToFleetHandler.execute(vehicle, fleet)
       }
 
-      parkVehicleAtLocation = (vehicle: Vehicle, location: Location) => {
+      parkVehicleAtLocation = (vehicle: Vehicle, location: VehicleLocation) => {
             const parkVehicleAtLocationHandler = new ParkVehicleAtLocation()
             return parkVehicleAtLocationHandler.execute(vehicle, location)
       }
@@ -73,16 +71,20 @@ class ParkingApp {
 
       verifyVehicleAtLocation = (
             vehicle: Vehicle,
-            location: Location
+            location: VehicleLocation
       ): boolean => {
             const verifyVehicleAtLocationHandler = new VerifyVehicleAtLocation()
             return verifyVehicleAtLocationHandler.execute(vehicle, location)
       }
 
       //location methods
-      createLocation = (): Location => {
+      createLocation = (
+            latitude: string,
+            longitude: string,
+            altitude: string | 0
+      ): VehicleLocation => {
             const createLocationHandler = new CreateLocation()
-            return createLocationHandler.execute()
+            return createLocationHandler.execute(latitude, longitude, altitude)
       }
 
       getLocations = () => {

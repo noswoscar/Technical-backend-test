@@ -1,14 +1,14 @@
-import { Location } from './Location'
 import { VehicleIdentity } from '../valueObjects/VehicleIdentity'
+import { VehicleLocation } from './VehicleLocation'
 import { VehicleType } from '../valueObjects/VehicleType'
 
 export class Vehicle {
       private vehicleIdentity: VehicleIdentity
-      private location: Location
+      private location: VehicleLocation
       private vehicleType: VehicleType
       constructor(
             vehicleIdentity: VehicleIdentity,
-            location: Location,
+            location: VehicleLocation,
             vehicleType: VehicleType
       ) {
             this.vehicleIdentity = vehicleIdentity
@@ -16,11 +16,11 @@ export class Vehicle {
             this.vehicleType = vehicleType
       }
 
-      getVehicleId = () => {
-            return this.vehicleIdentity.vehicleId
+      getVehicleNumberPlate = () => {
+            return this.vehicleIdentity.getVehicleNumberPlate()
       }
 
-      setLocation = (location: Location) => {
+      setLocation = (location: VehicleLocation) => {
             this.location = location
       }
 

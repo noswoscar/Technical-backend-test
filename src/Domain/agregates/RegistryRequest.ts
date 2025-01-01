@@ -14,7 +14,7 @@ export class RegistryRequest {
             if (this.fleet.hasVehicle(this.vehicle)) {
                   let errorMessage =
                         'the vehicle number ' +
-                        this.vehicle.getVehicleId() +
+                        this.vehicle.getVehicleNumberPlate() +
                         ' has already been registered into the fleet number ' +
                         this.fleet.getFleetId()
                   throw new Error(errorMessage)

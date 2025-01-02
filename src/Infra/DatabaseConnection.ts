@@ -1,4 +1,5 @@
-const { Client } = require('pg')
+import Client from 'pg'
+
 const client = new Client({
       user: 'oscar',
       host: 'localhost',

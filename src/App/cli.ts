@@ -2,7 +2,7 @@
 
 import { Command } from 'commander'
 import { FleetIdentity } from '../Domain/valueObjects/FleetIdentity'
-import ParkingApp from '../App/app'
+import ParkingApp from './app'
 import { VehicleIdentity } from '../Domain/valueObjects/VehicleIdentity'
 import { VehicleLocation } from '../Domain/entities/VehicleLocation'
 import { VehicleType } from '../Domain/valueObjects/VehicleType'

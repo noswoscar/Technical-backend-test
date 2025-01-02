@@ -1,6 +1,5 @@
 import { Given, Then, When } from '@cucumber/cucumber'
 
-import { DIContainer } from '../../src/App/DIContainer'
 import { Fleet } from '../../src/Domain/entities/Fleet'
 import { FleetIdentity } from '../../src/Domain/valueObjects/FleetIdentity'
 import ParkingApp from '../../src/App/app'
@@ -10,8 +9,7 @@ import { VehicleLocation } from '../../src/Domain/entities/VehicleLocation'
 import { VehicleType } from '../../src/Domain/valueObjects/VehicleType'
 import assert from 'assert'
 
-const parkingApp = new ParkingApp()
-const app = DIContainer.resolve<ParkingApp>('app')
+const app = new ParkingApp()
 let location: VehicleLocation
 let fleet: Fleet
 let otherfleet: Fleet

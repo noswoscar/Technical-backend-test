@@ -4,7 +4,7 @@
       "license": "proprietary",
       "main": "dist/App/app.js",
       "bin": {
-            "fleet": "./dist/cli.js"
+            "fleet": "./dist/App/cli.js"
       },
       "devDependencies": {
             "@cucumber/cucumber": "^8.3.0",
@@ -17,5 +17,8 @@
       "scripts": {
             "test": "cucumber-js --profile default",
             "build": "tsc"
+      },
+      "dependencies": {
+            "pg": "^8.13.1"
       }
 }

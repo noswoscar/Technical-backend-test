@@ -2,6 +2,7 @@ import { CreateFleet } from './CQRS/commands/CreateFleet'
 import { CreateLocation } from './CQRS/commands/CreateLocation'
 import { CreateVehicle } from './CQRS/commands/CreateVehicle'
 import { DIContainer } from './DIContainer'
+import { DatabaseConnector } from '../Infra/DatabaseConnector'
 import { ErrorLog } from '../Domain/agregates/ErrorLog'
 import { Fleet } from '../Domain/entities/Fleet'
 import { FleetIdentity } from '../Domain/valueObjects/FleetIdentity'
@@ -26,6 +27,12 @@ class ParkingApp {
             this.locations = []
             this.errorLog = new ErrorLog()
             DIContainer.register('app', this)
+      }
+
+      init = async () => {
+            let connector = new DatabaseConnector()
+            DIContainer.register('dbConnector', connector)
+            await connector.connect()
       }
 
       //commands

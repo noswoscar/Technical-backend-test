@@ -1,6 +1,8 @@
 // import { Error } from '../entities/Error'
 import { ErrorLog } from './ErrorLog'
 import { Fleet } from '../entities/Fleet'
+import { FleetRepository } from '../../Infra/Repositories/FleetRepository'
+import { QueryResult } from 'pg'
 import { Vehicle } from '../entities/Vehicle'
 
 export class RegistryRequest {
@@ -10,7 +12,9 @@ export class RegistryRequest {
             this.vehicle = vehicle
             this.fleet = fleet
       }
-      registerVehicleToFleet = () => {
+      registerVehicleToFleet = async (): Promise<
+            QueryResult<any> | undefined
+      > => {
             if (this.fleet.hasVehicle(this.vehicle)) {
                   let errorMessage =
                         'the vehicle number ' +
@@ -20,6 +24,13 @@ export class RegistryRequest {
                   throw new Error(errorMessage)
             } else {
                   this.fleet.setVehicle(this.vehicle)
+                  console.log(
+                        'calling fleetRepository update with : ',
+                        this.fleet
+                  )
+                  let fleetRepositiory = new FleetRepository()
+                  let res = await fleetRepositiory.updateVehicles(this.fleet)
+                  return res
             }
       }
 }

@@ -6,6 +6,7 @@ export class Vehicle {
       private vehicleIdentity: VehicleIdentity
       private location: VehicleLocation
       private vehicleType: VehicleType
+
       constructor(
             vehicleIdentity: VehicleIdentity,
             location: VehicleLocation,
@@ -26,5 +27,9 @@ export class Vehicle {
 
       getLocation = () => {
             return this.location
+      }
+
+      getVehicleType = () => {
+            return this.vehicleType
       }
 }

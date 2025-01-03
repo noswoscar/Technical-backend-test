@@ -18,6 +18,13 @@ export class Fleet {
             return this.fleetIdentity.getUserName()
       }
 
+      getVehiclesPlates = () => {
+            let numberPlates = this.vehicles.map((vehicle) =>
+                  vehicle.getVehicleNumberPlate()
+            )
+            return numberPlates
+      }
+
       getVehicles = () => {
             return this.vehicles
       }

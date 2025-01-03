@@ -17,9 +17,9 @@ const cliApp = async () => {
       program
             .command('create <userId>')
             .description('Create a new fleet for the user')
-            .action((userId) => {
+            .action(async (userId) => {
                   const fleetIdentity = new FleetIdentity(userId)
-                  const fleet = parkingApp.createFleet(fleetIdentity)
+                  const fleet = await parkingApp.createFleet(fleetIdentity)
                   console.log(`Fleet created with ID: ${fleet.getFleetId()}`)
                   process.exit(0)
             })

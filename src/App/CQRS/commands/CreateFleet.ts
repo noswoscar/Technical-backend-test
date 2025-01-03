@@ -5,24 +5,22 @@ import { FleetRepository } from '../../../Infra/Repositories/FleetRepository'
 import ParkingApp from '../../app'
 
 export class CreateFleet {
-      execute(fleetIdentity: FleetIdentity): Fleet {
+      async execute(fleetIdentity: FleetIdentity): Promise<Fleet> {
             const app = DIContainer.resolve<ParkingApp>('app')
-            const fleetRepository = new FleetRepository()
             const fleet = new Fleet(fleetIdentity, [])
-            fleetRepository.insert(fleet)
+            if (
+                  !app
+                        .getFleets()
+                        .find(
+                              (fleetItem) =>
+                                    fleetItem.getFleetId() ===
+                                    fleet.getFleetId()
+                        )
+            ) {
+                  app.getFleets().push(fleet)
+                  const fleetRepository = new FleetRepository()
+                  const res = await fleetRepository.insert(fleet)
+            }
             return fleet
-
-            // if (
-            //       !app
-            //             .getFleets()
-            //             .find(
-            //                   (fleetItem) =>
-            //                         fleetItem.getFleetId() ===
-            //                         fleet.getFleetId()
-            //             )
-            // ) {
-            //       app.getFleets().push(fleet)
-            // }
-            // return fleet
       }
 }

@@ -7,6 +7,7 @@ import { ErrorLog } from '../Domain/agregates/ErrorLog'
 import { Fleet } from '../Domain/entities/Fleet'
 import { FleetIdentity } from '../Domain/valueObjects/FleetIdentity'
 import { ParkVehicleAtLocation } from './CQRS/commands/ParkVehicleAtLocation'
+import { QueryResult } from 'pg'
 import { Vehicle } from '../Domain/entities/Vehicle'
 import { VehicleIdentity } from '../Domain/valueObjects/VehicleIdentity'
 import { VehicleLocation } from '../Domain/entities/VehicleLocation'
@@ -29,17 +30,24 @@ class ParkingApp {
             DIContainer.register('app', this)
       }
 
-      init = async () => {
+      init = async (): Promise<void> => {
             let connector = new DatabaseConnector()
             DIContainer.register('dbConnector', connector)
-            await connector.connect()
+            let promise = await connector.connect()
+            return promise
+      }
+
+      close = async () => {
+            const connector: DatabaseConnector =
+                  DIContainer.resolve<DatabaseConnector>('dbConnector')
+            connector.disconnect()
       }
 
       //commands
       //fleet methods
-      createFleet = (fleetIdentity: FleetIdentity) => {
+      createFleet = async (fleetIdentity: FleetIdentity): Promise<Fleet> => {
             const createFleetHandler = new CreateFleet()
-            return createFleetHandler.execute(fleetIdentity)
+            return await createFleetHandler.execute(fleetIdentity)
       }
 
       getFleets = () => {
@@ -50,15 +58,21 @@ class ParkingApp {
       }
 
       //vehicle methods
-      createVehicle = (
+      createVehicle = async (
             vehicleIdentity: VehicleIdentity,
             vehicleType: VehicleType
-      ) => {
+      ): Promise<Vehicle> => {
             const createVehicleHandler = new CreateVehicle()
-            return createVehicleHandler.execute(vehicleIdentity, vehicleType)
+            return await createVehicleHandler.execute(
+                  vehicleIdentity,
+                  vehicleType
+            )
       }
 
-      registerVehicleToFleet = (vehicle: Vehicle, fleet: Fleet) => {
+      registerVehicleToFleet = (
+            vehicle: Vehicle,
+            fleet: Fleet
+      ): Promise<QueryResult | undefined> => {
             const registerVehicleToFleetHandler = new registerVehicleToFleet()
             return registerVehicleToFleetHandler.execute(vehicle, fleet)
       }
@@ -71,9 +85,13 @@ class ParkingApp {
       getVehicles = () => {
             return this.vehicles
       }
-      verifyVehicleInFleet = (vehicle: Vehicle, fleet: Fleet) => {
+      verifyVehicleInFleet = async (
+            vehicle: Vehicle,
+            fleet: Fleet
+      ): Promise<QueryResult | undefined> => {
             const verifyVehicleInFleetHandler = new VerifyVehicleInFleet()
-            return verifyVehicleInFleetHandler.execute(vehicle, fleet)
+            const result = verifyVehicleInFleetHandler.execute(vehicle, fleet)
+            return result
       }
 
       verifyVehicleAtLocation = (

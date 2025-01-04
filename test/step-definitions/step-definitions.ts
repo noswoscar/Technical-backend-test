@@ -33,16 +33,20 @@ Given('a vehicle', async function () {
 })
 
 When('I register this vehicle into my fleet', async function () {
-      await app.registerVehicleToFleet(vehicle, fleet)
+      const result: QueryResult | undefined = await app.registerVehicleToFleet(
+            vehicle,
+            fleet
+      )
 })
 
-// Then('this vehicle should be part of my vehicle fleet', async function () {
-//       let result: QueryResult | undefined = await app.verifyVehicleInFleet(
-//             vehicle,
-//             fleet
-//       )
-//       assert.strictEqual(result, true)
-// })
+Then('this vehicle should be part of my vehicle fleet', async function () {
+      let result: QueryResult | undefined = await app.verifyVehicleInFleet(
+            vehicle,
+            fleet
+      )
+      assert.strictEqual(result?.rowCount, 1)
+      assert.strictEqual(typeof result?.rows[0].id, 'number')
+})
 
 // Given('I have registered this vehicle into my fleet', function () {
 //       let vehicleInFleet = app.verifyVehicleInFleet(vehicle, fleet)
@@ -120,7 +124,6 @@ When('I register this vehicle into my fleet', async function () {
 // )
 
 AfterAll(async () => {
-      console.log('after all')
       if (app) {
             await app.close() // Assuming your app has a close method
       }

@@ -10,15 +10,10 @@ export class DatabaseConnector {
                   password: 'password',
                   port: 5433,
             })
-            // this.client.on('error', (err) => {
-            //       console.error('Unexpected error on idle client', err)
-            //       process.exit(-1)
-            // })
       }
 
       connect = async () => {
-            let promise = await this.client.connect()
-            return promise
+            await this.client.connect()
       }
 
       disconnect = async () => {

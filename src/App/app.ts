@@ -30,6 +30,7 @@ class ParkingApp {
             DIContainer.register('app', this)
       }
 
+      //Init App methods
       init = async (): Promise<void> => {
             let connector = new DatabaseConnector()
             DIContainer.register('dbConnector', connector)
@@ -43,7 +44,6 @@ class ParkingApp {
             connector.disconnect()
       }
 
-      //commands
       //fleet methods
       createFleet = async (fleetIdentity: FleetIdentity): Promise<Fleet> => {
             const createFleetHandler = new CreateFleet()
@@ -69,12 +69,12 @@ class ParkingApp {
             )
       }
 
-      registerVehicleToFleet = (
+      registerVehicleToFleet = async (
             vehicle: Vehicle,
             fleet: Fleet
       ): Promise<QueryResult | undefined> => {
             const registerVehicleToFleetHandler = new registerVehicleToFleet()
-            return registerVehicleToFleetHandler.execute(vehicle, fleet)
+            return await registerVehicleToFleetHandler.execute(vehicle, fleet)
       }
 
       parkVehicleAtLocation = (vehicle: Vehicle, location: VehicleLocation) => {
@@ -90,7 +90,10 @@ class ParkingApp {
             fleet: Fleet
       ): Promise<QueryResult | undefined> => {
             const verifyVehicleInFleetHandler = new VerifyVehicleInFleet()
-            const result = verifyVehicleInFleetHandler.execute(vehicle, fleet)
+            const result = await verifyVehicleInFleetHandler.execute(
+                  vehicle,
+                  fleet
+            )
             return result
       }
 

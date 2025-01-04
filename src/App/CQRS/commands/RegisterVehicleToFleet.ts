@@ -22,24 +22,12 @@ export class registerVehicleToFleet {
                   res = await registryRequest.registerVehicleToFleet()
                   return res
             } catch (error: any) {
-                  // console.log(error)
                   let myerror = new ProgramError('RegistryError', error.message)
                   app.getErrorLog().setError(myerror)
                   app.getErrorLog().logError(myerror)
+                  return undefined
             } finally {
+                  return undefined
             }
       }
 }
-
-// const app = DIContainer.resolve<ParkingApp>('app')
-
-// let registryRequest: RegistryRequest = new RegistryRequest(vehicle, fleet)
-// try {
-//       registryRequest.registerVehicleToFleet()
-// } catch (error: any) {
-//       let myerror = new ProgramError('RegistryError', error.message)
-//       app.getErrorLog().setError(myerror)
-//       app.getErrorLog().logError(myerror)
-// } finally {
-//       return
-// }

@@ -6,11 +6,13 @@ import { QueryResult } from 'pg'
 import { Vehicle } from '../../../Domain/entities/Vehicle'
 
 export class VerifyVehicleInFleet {
-      execute(
+      async execute(
             vehicle: Vehicle,
             fleet: Fleet
-      ): Promise<QueryResult> | undefined {
+      ): Promise<QueryResult | undefined> {
             const app = DIContainer.resolve<ParkingApp>('app')
+
+            //old memory code
             let conditionsMet = 0
             if (
                   fleet
@@ -23,8 +25,13 @@ export class VerifyVehicleInFleet {
             ) {
                   conditionsMet++
             }
+
+            //new repo code
             const fleetRepository = new FleetRepository()
-            let result = fleetRepository.findVehicleInFleet(vehicle, fleet)
+            let result = await fleetRepository.findVehicleInFleet(
+                  vehicle,
+                  fleet
+            )
             return result
       }
 }

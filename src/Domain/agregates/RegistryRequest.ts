@@ -24,10 +24,6 @@ export class RegistryRequest {
                   throw new Error(errorMessage)
             } else {
                   this.fleet.setVehicle(this.vehicle)
-                  console.log(
-                        'calling fleetRepository update with : ',
-                        this.fleet
-                  )
                   let fleetRepositiory = new FleetRepository()
                   let res = await fleetRepositiory.updateVehicles(this.fleet)
                   return res

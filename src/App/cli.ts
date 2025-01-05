@@ -7,26 +7,30 @@ import { VehicleIdentity } from '../Domain/valueObjects/VehicleIdentity'
 import { VehicleLocation } from '../Domain/entities/VehicleLocation'
 import { VehicleType } from '../Domain/valueObjects/VehicleType'
 
-const cliApp = async () => {
-      const parkingApp = new ParkingApp()
-      await parkingApp.init()
+// const cliApp = async () => {
+//       const parkingApp = new ParkingApp()
+//       await parkingApp.init()
 
-      const program = new Command()
+//       const program = new Command()
 
-      // Create Fleet Command
-      program
-            .command('create <userId>')
-            .description('Create a new fleet for the user')
-            .action(async (userId) => {
-                  const fleetIdentity = new FleetIdentity(userId)
-                  const fleet = await parkingApp.createFleet(fleetIdentity)
-                  console.log(`Fleet created with ID: ${fleet.getFleetId()}`)
-                  process.exit(0)
-            })
-      program.parse(process.argv)
-}
+//       // Create Fleet Command
+//       program
+//             .command('create <userId>')
+//             .description('Create a new fleet for the user')
+//             .action(async (userId) => {
+//                   const fleetIdentity = new FleetIdentity(userId)
+//                   const fleet = await parkingApp.createFleet(fleetIdentity)
+//                   if (fleet === undefined) {
+//                         console.log(`Error creating fleet`)
+//                         return
+//                   }
+//                   console.log(`Fleet created with ID: ${fleet.getFleetId()}`)
+//                   process.exit(0)
+//             })
+//       program.parse(process.argv)
+// }
 
-cliApp()
+// cliApp()
 
 // // Register Vehicle Command
 // program

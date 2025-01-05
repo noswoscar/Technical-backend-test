@@ -12,11 +12,11 @@ export class DatabaseConnector {
             })
       }
 
-      connect = async () => {
+      connect = async (): Promise<void> => {
             await this.client.connect()
       }
 
-      disconnect = async () => {
+      disconnect = async (): Promise<void> => {
             await this.client.end()
       }
 

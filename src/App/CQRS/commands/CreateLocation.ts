@@ -1,16 +1,19 @@
 import { DIContainer } from '../../DIContainer'
+import { LocationRepository } from '../../../Infra/Repositories/LocationRepository'
 import ParkingApp from '../../app'
 import { VehicleLocation } from '../../../Domain/entities/VehicleLocation'
 
 export class CreateLocation {
-      execute(
+      async execute(
             latitude: string,
             longitude: string,
             altitude: string | 0
-      ): VehicleLocation {
+      ): Promise<string | undefined> {
             const app = DIContainer.resolve<ParkingApp>('app')
             let location = new VehicleLocation(latitude, longitude, altitude)
-            app.getLocations().push(location)
-            return location
+            const locationRepositoryHandler = new LocationRepository()
+            const result: string | undefined =
+                  await locationRepositoryHandler.insert(location)
+            return result
       }
 }

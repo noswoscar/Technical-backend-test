@@ -18,16 +18,18 @@ interface SharedData {
       myFleetId: string | undefined
       worldVehicleId: number | undefined
       hectorsFleetId: string | undefined
+      worldLocationId: string | undefined
 }
 class CustomWorld {
       sharedData: SharedData
       constructor() {
-            let app = new ParkingApp()
+            const app = new ParkingApp()
             this.sharedData = {
                   app: app,
                   myFleetId: '',
                   worldVehicleId: 0,
                   hectorsFleetId: '',
+                  worldLocationId: '',
             }
       }
 
@@ -196,13 +198,27 @@ Given(
       }
 )
 
-// Given('a location', function () {
-//       location = app.createLocation('12', '-60', '1000')
-// })
+Given('a location', async function (this: CustomWorld) {
+      this.sharedData.worldLocationId =
+            await this.sharedData.app.createLocation('12', '-60', '1000')
+      if (!this.sharedData.worldLocationId) {
+            throw new Error('Failed to initialize a Location in the database.')
+      }
+})
 
-// When('I park my vehicle at this location', function () {
-//       app.parkVehicleAtLocation(vehicle, location)
-// })
+When('I park my vehicle at this location', async function (this: CustomWorld) {
+      if (!this.sharedData.worldLocationId) {
+            throw new Error('location not in the database.')
+      }
+      if (!this.sharedData.worldVehicleId) {
+            throw new Error('vehicle not in the database.')
+      }
+      const result = await this.sharedData.app.parkVehicleAtLocation(
+            this.sharedData.worldVehicleId,
+            this.sharedData.worldLocationId
+      )
+      assert.strictEqual(result, true)
+})
 
 // Then(
 //       'the known location of my vehicle should verify this location',

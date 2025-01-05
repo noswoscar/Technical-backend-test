@@ -1,31 +1,25 @@
+import { LocationRepository } from '../../Infra/Repositories/LocationRepository'
 import { Vehicle } from '../entities/Vehicle'
 import { VehicleLocation } from '../entities/VehicleLocation'
 
 export class ParkingRequest {
-      private vehicle: Vehicle
-      private location: VehicleLocation
-      constructor(vehicle: Vehicle, location: VehicleLocation) {
-            this.vehicle = vehicle
-            this.location = location
+      private vehicleId: number
+      private locationId: string
+      private locationRepository
+      constructor(
+            vehicleId: number,
+            locationId: string,
+            locationRepository: LocationRepository
+      ) {
+            this.vehicleId = vehicleId
+            this.locationId = locationId
+            this.locationRepository = locationRepository
       }
 
-      parkVehicle = () => {
-            if (this.vehicle.getLocation() === this.location) {
-                  //replae with thourough verify {
-                  let errorMessage =
-                        'the vehicle number ' +
-                        this.vehicle.getVehicleNumberPlate() +
-                        ' is already parked at the location (' +
-                        this.location.getCoordinates().latitude +
-                        ' , ' +
-                        this.location.getCoordinates().longitude +
-                        ' , ' +
-                        this.location.getCoordinates().altitude +
-                        ')'
-
-                  throw new Error(errorMessage)
-            }
-            // this.location.setParkedVehicle(this.vehicle)
-            this.vehicle.setLocation(this.location)
+      parkVehicle = (): Promise<boolean> => {
+            return this.locationRepository.addVehicleToLocation(
+                  this.vehicleId,
+                  this.locationId
+            )
       }
 }

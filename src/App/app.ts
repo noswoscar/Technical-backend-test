@@ -83,9 +83,9 @@ class ParkingApp {
             return res
       }
 
-      parkVehicleAtLocation = (vehicle: Vehicle, location: VehicleLocation) => {
+      parkVehicleAtLocation = (vehicleId: number, locationId: string) => {
             const parkVehicleAtLocationHandler = new ParkVehicleAtLocation()
-            return parkVehicleAtLocationHandler.execute(vehicle, location)
+            return parkVehicleAtLocationHandler.execute(vehicleId, locationId)
       }
 
       getVehicles = () => {
@@ -116,7 +116,7 @@ class ParkingApp {
             latitude: string,
             longitude: string,
             altitude: string | 0
-      ): VehicleLocation => {
+      ): Promise<string | undefined> => {
             const createLocationHandler = new CreateLocation()
             return createLocationHandler.execute(latitude, longitude, altitude)
       }

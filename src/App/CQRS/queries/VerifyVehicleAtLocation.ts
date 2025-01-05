@@ -1,13 +1,22 @@
 import { DIContainer } from '../../DIContainer'
+import { LocationRepository } from '../../../Infra/Repositories/LocationRepository'
 import ParkingApp from '../../app'
-import { Vehicle } from '../../../Domain/entities/Vehicle'
-import { VehicleLocation } from '../../../Domain/entities/VehicleLocation'
+import { VehicleRepository } from '../../../Infra/Repositories/VehicleRepository'
 
 export class VerifyVehicleAtLocation {
-      execute(vehicle: Vehicle, location: VehicleLocation): boolean {
+      async execute(vehicleId: number, locationId: string): Promise<boolean> {
             const app = DIContainer.resolve<ParkingApp>('app')
-            if (vehicle.getLocation() === location) {
-                  //verify this better
+            const vehicleRepository = new VehicleRepository()
+            const vehicleLocation = await vehicleRepository.getVehicleLocation(
+                  vehicleId
+            )
+            if (!vehicleLocation) {
+                  return false
+            }
+            const locationRepository = new LocationRepository()
+            const vehicleAtLocation =
+                  await locationRepository.getVehicleAtLocation(vehicleLocation)
+            if (vehicleId.toString() === vehicleAtLocation) {
                   return true
             }
             return false

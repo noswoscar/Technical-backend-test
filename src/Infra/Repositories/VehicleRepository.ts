@@ -7,6 +7,27 @@ export class VehicleRepository {
       constructor() {}
       find = () => {}
 
+      getVehicleLocation = async (
+            vehicleId: number
+      ): Promise<string | undefined> => {
+            const dbConnector: DatabaseConnector =
+                  DIContainer.resolve<DatabaseConnector>('dbConnector')
+            const client = dbConnector.getClient()
+            try {
+                  const res: QueryResult<{ location: string }> | undefined =
+                        await client.query(
+                              `SELECT location from vehicles WHERE id = $1;`,
+                              [vehicleId.toString()]
+                        )
+                  return res.rows[0].location
+            } catch (err: unknown) {
+                  console.error(
+                        'Error executing query to update a Location with a vehicle'
+                  )
+                  return undefined
+            }
+      }
+
       insert = async (vehicle: Vehicle): Promise<number | undefined> => {
             const dbConnector: DatabaseConnector =
                   DIContainer.resolve<DatabaseConnector>('dbConnector')

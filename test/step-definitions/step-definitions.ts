@@ -220,15 +220,23 @@ When('I park my vehicle at this location', async function (this: CustomWorld) {
       assert.strictEqual(result, true)
 })
 
-// Then(
-//       'the known location of my vehicle should verify this location',
-//       function () {
-//             assert.strictEqual(
-//                   app.verifyVehicleAtLocation(vehicle, location),
-//                   true
-//             )
-//       }
-// )
+Then(
+      'the known location of my vehicle should verify this location',
+      async function async(this: CustomWorld) {
+            if (!this.sharedData.worldLocationId) {
+                  throw new Error('location not in the database.')
+            }
+            if (!this.sharedData.worldVehicleId) {
+                  throw new Error('vehicle not in the database.')
+            }
+            const result: boolean =
+                  await this.sharedData.app.verifyVehicleAtLocation(
+                        this.sharedData.worldVehicleId,
+                        this.sharedData.worldLocationId
+                  )
+            assert.strictEqual(result, true)
+      }
+)
 
 // Given('my vehicle has been parked into this location', function () {
 //       app.parkVehicleAtLocation(vehicle, location)

@@ -54,6 +54,27 @@ export class LocationRepository {
             }
       }
 
+      getVehicleAtLocation = async (
+            locationId: string
+      ): Promise<string | undefined> => {
+            const dbConnector: DatabaseConnector =
+                  DIContainer.resolve<DatabaseConnector>('dbConnector')
+            const client = dbConnector.getClient()
+            try {
+                  const res: QueryResult<{ vehicle: string }> | undefined =
+                        await client.query(
+                              `select vehicle from locations where id = $1;`,
+                              [locationId]
+                        )
+                  return res.rows[0].vehicle
+            } catch (err: unknown) {
+                  console.error(
+                        'Error executing query to update a Location with a vehicle'
+                  )
+                  return undefined
+            }
+      }
+
       update = () => {}
 
       delete = () => {}

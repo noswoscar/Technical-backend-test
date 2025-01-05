@@ -1,4 +1,13 @@
-import { AfterAll, BeforeAll, Given, Then, When } from '@cucumber/cucumber'
+import {
+      After,
+      AfterAll,
+      Before,
+      BeforeAll,
+      Given,
+      Then,
+      When,
+      setWorldConstructor,
+} from '@cucumber/cucumber'
 
 import { Fleet } from '../../src/Domain/entities/Fleet'
 import { FleetIdentity } from '../../src/Domain/valueObjects/FleetIdentity'
@@ -10,43 +19,105 @@ import { VehicleLocation } from '../../src/Domain/entities/VehicleLocation'
 import { VehicleType } from '../../src/Domain/valueObjects/VehicleType'
 import assert from 'assert'
 
-let app: ParkingApp
-let location: VehicleLocation
-let fleet: Fleet
-let otherfleet: Fleet
-let vehicle: Vehicle
+// let app: ParkingApp
+// let location: VehicleLocation
+// let otherfleet: Fleet
 
-// Initialize the app asynchronously
-BeforeAll(async () => {
-      app = new ParkingApp()
-      await app.init()
+interface SharedData {
+      app: ParkingApp
+      worldFleetId: string | undefined
+      worldVehicleId: number | undefined
+}
+class CustomWorld {
+      sharedData: SharedData
+      constructor() {
+            let app = new ParkingApp()
+            this.sharedData = {
+                  app: app,
+                  worldFleetId: '',
+                  worldVehicleId: 0,
+            }
+      }
+
+      async initialize() {
+            try {
+                  await this.sharedData.app.init()
+            } catch (err: unknown) {
+                  console.log(
+                        'An error occured when connecting to the database'
+                  )
+            }
+      }
+}
+
+setWorldConstructor(CustomWorld)
+
+Before(async function (this: CustomWorld) {
+      try {
+            await this.initialize() // Ensure the app is initialized before each scenario
+      } catch (err: unknown) {
+            console.log(err)
+      }
 })
 
-Given('my fleet', async function () {
+Given('my fleet', async function (this: CustomWorld) {
       let fleetIdentity: FleetIdentity = new FleetIdentity('Oscar')
-      fleet = await app.createFleet(fleetIdentity)
+      this.sharedData.worldFleetId = await this.sharedData.app.createFleet(
+            fleetIdentity
+      )
+      if (!this.sharedData.worldFleetId) {
+            throw new Error('Failed to initialize my fleet in the database.')
+      }
 })
 
-Given('a vehicle', async function () {
+Given('a vehicle', async function (this: CustomWorld) {
       let vehicleIdentity: VehicleIdentity = new VehicleIdentity('XQ-672-81')
-      vehicle = await app.createVehicle(vehicleIdentity, VehicleType.Car)
+      this.sharedData.worldVehicleId = await this.sharedData.app.createVehicle(
+            vehicleIdentity,
+            VehicleType.Car
+      )
+      if (!this.sharedData.worldVehicleId) {
+            throw new Error('Failed to initialize a vehicle in the database.')
+      }
 })
 
-When('I register this vehicle into my fleet', async function () {
-      const result: QueryResult | undefined = await app.registerVehicleToFleet(
-            vehicle,
-            fleet
-      )
-})
+When(
+      'I register this vehicle into my fleet',
+      async function (this: CustomWorld) {
+            if (!this.sharedData.worldFleetId) {
+                  throw new Error('vehicle not in the database.')
+            }
+            if (!this.sharedData.worldVehicleId) {
+                  throw new Error('my fleet not in the database.')
+            }
+            const result: boolean | undefined =
+                  await this.sharedData.app.registerVehicleToFleet(
+                        this.sharedData.worldVehicleId,
+                        this.sharedData.worldFleetId
+                  )
+            if (!result) {
+                  throw new Error('Failed to register vehicle in fleet.')
+            }
+      }
+)
 
-Then('this vehicle should be part of my vehicle fleet', async function () {
-      let result: QueryResult | undefined = await app.verifyVehicleInFleet(
-            vehicle,
-            fleet
-      )
-      assert.strictEqual(result?.rowCount, 1)
-      assert.strictEqual(typeof result?.rows[0].id, 'number')
-})
+Then(
+      'this vehicle should be part of my vehicle fleet',
+      async function (this: CustomWorld) {
+            if (!this.sharedData.worldFleetId) {
+                  throw new Error('vehicle not in the database.')
+            }
+            if (!this.sharedData.worldVehicleId) {
+                  throw new Error('my fleet not in the database.')
+            }
+            let result: boolean =
+                  await this.sharedData.app.verifyVehicleInFleet(
+                        this.sharedData.worldVehicleId,
+                        this.sharedData.worldFleetId
+                  )
+            assert.strictEqual(result, true)
+      }
+)
 
 // Given('I have registered this vehicle into my fleet', function () {
 //       let vehicleInFleet = app.verifyVehicleInFleet(vehicle, fleet)
@@ -123,8 +194,10 @@ Then('this vehicle should be part of my vehicle fleet', async function () {
 //       }
 // )
 
-AfterAll(async () => {
-      if (app) {
-            await app.close() // Assuming your app has a close method
+After(async function (this: CustomWorld) {
+      try {
+            await this.sharedData.app.close()
+      } catch (err: unknown) {
+            console.log('An error occured when closing the database')
       }
 })

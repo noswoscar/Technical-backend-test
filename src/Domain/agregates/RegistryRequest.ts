@@ -6,27 +6,18 @@ import { QueryResult } from 'pg'
 import { Vehicle } from '../entities/Vehicle'
 
 export class RegistryRequest {
-      private vehicle: Vehicle
-      private fleet: Fleet
-      constructor(vehicle: Vehicle, fleet: Fleet) {
-            this.vehicle = vehicle
-            this.fleet = fleet
+      private vehicleId: number
+      private fleetId: string
+      constructor(vehicleId: number, fleetId: string) {
+            this.vehicleId = vehicleId
+            this.fleetId = fleetId
       }
-      registerVehicleToFleet = async (): Promise<
-            QueryResult<any> | undefined
-      > => {
-            if (this.fleet.hasVehicle(this.vehicle)) {
-                  let errorMessage =
-                        'the vehicle number ' +
-                        this.vehicle.getVehicleNumberPlate() +
-                        ' has already been registered into the fleet number ' +
-                        this.fleet.getFleetId()
-                  throw new Error(errorMessage)
-            } else {
-                  this.fleet.setVehicle(this.vehicle)
-                  let fleetRepositiory = new FleetRepository()
-                  let res = await fleetRepositiory.updateVehicles(this.fleet)
-                  return res
-            }
+      registerVehicleToFleet = async (): Promise<boolean | undefined> => {
+            let fleetRepositiory = new FleetRepository()
+
+            return await fleetRepositiory.registerVehicle(
+                  this.vehicleId,
+                  this.fleetId
+            )
       }
 }

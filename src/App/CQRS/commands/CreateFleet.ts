@@ -5,7 +5,7 @@ import { FleetRepository } from '../../../Infra/Repositories/FleetRepository'
 import ParkingApp from '../../app'
 
 export class CreateFleet {
-      async execute(fleetIdentity: FleetIdentity): Promise<Fleet> {
+      async execute(fleetIdentity: FleetIdentity): Promise<string | undefined> {
             const app = DIContainer.resolve<ParkingApp>('app')
             const fleet = new Fleet(fleetIdentity, [])
 
@@ -22,8 +22,10 @@ export class CreateFleet {
                   app.getFleets().push(fleet)
             }
 
+            //new db code
             const fleetRepository = new FleetRepository()
+
             const res = await fleetRepository.insert(fleet)
-            return fleet
+            return res
       }
 }

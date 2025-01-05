@@ -1,25 +1,35 @@
 import { DIContainer } from '../../App/DIContainer'
 import { DatabaseConnector } from '../DatabaseConnector'
+import { QueryResult } from 'pg'
 import { Vehicle } from '../../Domain/entities/Vehicle'
 
 export class VehicleRepository {
       constructor() {}
       find = () => {}
 
-      insert = async (vehicle: Vehicle) => {
+      insert = async (vehicle: Vehicle): Promise<number | undefined> => {
             const dbConnector: DatabaseConnector =
                   DIContainer.resolve<DatabaseConnector>('dbConnector')
             const client = dbConnector.getClient()
-            const res = await client.query(
-                  'INSERT INTO vehicles (number_plate, latitude, longitude, altitude, type, created_at) VALUES ($1, $2, $3, $4, $5, NOW()) RETURNING number_plate;',
-                  [
-                        vehicle.getVehicleNumberPlate(),
-                        vehicle.getLocation().getCoordinates().latitude,
-                        vehicle.getLocation().getCoordinates().longitude,
-                        vehicle.getLocation().getCoordinates().altitude,
-                        vehicle.getVehicleType(),
-                  ]
-            )
+            try {
+                  const res: QueryResult<{ id: number }> = await client.query(
+                        'INSERT INTO vehicles (number_plate, latitude, longitude, altitude, type, created_at) VALUES ($1, $2, $3, $4, $5, NOW()) RETURNING id;',
+                        [
+                              vehicle.getVehicleNumberPlate(),
+                              vehicle.getLocation().getCoordinates().latitude,
+                              vehicle.getLocation().getCoordinates().longitude,
+                              vehicle.getLocation().getCoordinates().altitude,
+                              vehicle.getVehicleType(),
+                        ]
+                  )
+                  return res.rows[0].id
+            } catch (err: unknown) {
+                  if (err instanceof Error) {
+                        console.error('Error executing query:', err.message)
+                        console.error('Detailed error:', err)
+                  }
+                  return undefined
+            }
       }
 
       update = () => {}

@@ -3,15 +3,10 @@ import { DatabaseConnector } from '../DatabaseConnector'
 import { Fleet } from '../../Domain/entities/Fleet'
 import { IFleetRepository } from './interfaces/IFleetRepository'
 import { QueryResult } from 'pg'
-import { Vehicle } from '../../Domain/entities/Vehicle'
 
 export class FleetRepository implements IFleetRepository {
       constructor() {}
-      find = () => {}
-      findVehicleInFleet = async (
-            vehicle: Vehicle,
-            fleet: Fleet
-      ): Promise<QueryResult<any> | undefined> => {
+      find = async (fleet: Fleet) => {
             const dbConnector: DatabaseConnector =
                   DIContainer.resolve<DatabaseConnector>('dbConnector')
             const client = dbConnector.getClient()
@@ -20,15 +15,43 @@ export class FleetRepository implements IFleetRepository {
                         'select * from fleets where fleet_id = $1',
                         [fleet.getFleetId()]
                   )
-                  return res
+                  if (res === undefined) {
+                        return undefined
+                  }
+                  return res.rows[0]
             } catch (err: any) {
                   console.error('Error executing query:', err.message)
                   console.error('PostgreSQL error code:', err.code)
                   console.error('Detailed error:', err)
             }
       }
+      ////wrong
+      findVehicleInFleet = async (
+            vehicleId: number,
+            fleetId: string
+      ): Promise<boolean> => {
+            const dbConnector: DatabaseConnector =
+                  DIContainer.resolve<DatabaseConnector>('dbConnector')
+            const client = dbConnector.getClient()
+            try {
+                  const res: QueryResult<{ vehicles: Array<string> }> =
+                        await client.query(
+                              'select * from fleets where fleet_id = $1',
+                              [fleetId]
+                        )
+                  const fleetVehicles = res.rows[0].vehicles
+                  console.log('result of query : ', fleetVehicles)
+                  if (fleetVehicles.includes(vehicleId.toString())) return true
+                  return false
+            } catch (err: any) {
+                  console.error('Error executing query:', err.message)
+                  console.error('PostgreSQL error code:', err.code)
+                  console.error('Detailed error:', err)
+                  return false
+            }
+      }
 
-      insert = async (fleet: Fleet) => {
+      insert = async (fleet: Fleet): Promise<string | undefined> => {
             const dbConnector: DatabaseConnector =
                   DIContainer.resolve<DatabaseConnector>('dbConnector')
             const client = dbConnector.getClient()
@@ -41,32 +64,36 @@ export class FleetRepository implements IFleetRepository {
                               fleet.getVehiclesPlates(),
                         ]
                   )
-                  return res
-            } catch (err: any) {
-                  console.error('Error executing query:', err.message)
-                  console.error('PostgreSQL error code:', err.code)
-                  console.error('Detailed error:', err)
+                  return res.rows[0].fleet_id
+            } catch (err: unknown) {
+                  if (err instanceof Error) {
+                        console.error('Error executing query:', err.message)
+                        console.error('Detailed error:', err)
+                  }
+                  return undefined
             }
       }
 
       update = () => {}
 
-      updateVehicles = async (
-            fleet: Fleet
-      ): Promise<QueryResult<any> | undefined> => {
+      registerVehicle = async (
+            vehicleId: number,
+            fleetId: string
+      ): Promise<boolean | undefined> => {
             const dbConnector: DatabaseConnector =
                   DIContainer.resolve<DatabaseConnector>('dbConnector')
             const client = dbConnector.getClient()
             try {
                   const res = await client.query(
                         `UPDATE fleets SET vehicles = $1 WHERE fleet_id = $2;`,
-                        [fleet.getVehiclesPlates(), fleet.getFleetId()]
+                        [[vehicleId.toString()], fleetId]
                   )
-                  return res
+                  return true
             } catch (err: any) {
                   console.error('Error executing query:', err.message)
                   console.error('PostgreSQL error code:', err.code)
                   console.error('Detailed error:', err)
+                  return false
             }
       }
 

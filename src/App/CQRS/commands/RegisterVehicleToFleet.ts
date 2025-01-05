@@ -8,16 +8,15 @@ import { Vehicle } from '../../../Domain/entities/Vehicle'
 
 export class registerVehicleToFleet {
       async execute(
-            vehicle: Vehicle,
-            fleet: Fleet
-      ): Promise<QueryResult | undefined> {
+            vehicleId: number,
+            fleetId: string
+      ): Promise<boolean | undefined> {
             const app = DIContainer.resolve<ParkingApp>('app')
-
             let registryRequest: RegistryRequest = new RegistryRequest(
-                  vehicle,
-                  fleet
+                  vehicleId,
+                  fleetId
             )
-            let res: QueryResult | undefined
+            let res: boolean | undefined
             try {
                   res = await registryRequest.registerVehicleToFleet()
                   return res
@@ -25,8 +24,6 @@ export class registerVehicleToFleet {
                   let myerror = new ProgramError('RegistryError', error.message)
                   app.getErrorLog().setError(myerror)
                   app.getErrorLog().logError(myerror)
-                  return undefined
-            } finally {
                   return undefined
             }
       }

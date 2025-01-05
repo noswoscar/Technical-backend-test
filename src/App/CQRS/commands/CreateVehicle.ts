@@ -10,14 +10,21 @@ export class CreateVehicle {
       async execute(
             vehicleIdentity: VehicleIdentity,
             vehicleType: VehicleType
-      ): Promise<Vehicle> {
+      ): Promise<number | undefined> {
             const app = DIContainer.resolve<ParkingApp>('app')
-
             let location = new VehicleLocation('60', '44', '340')
             let vehicle = new Vehicle(vehicleIdentity, location, vehicleType)
+
+            //memory code
             app.getVehicles().push(vehicle)
+
+            //db code
             const vehicleRepository = new VehicleRepository()
-            await vehicleRepository.insert(vehicle)
-            return vehicle
+            let res = await vehicleRepository.insert(vehicle)
+            if (!res) {
+                  return undefined
+            } else {
+                  return res
+            }
       }
 }

@@ -7,7 +7,6 @@ import { ErrorLog } from '../Domain/agregates/ErrorLog'
 import { Fleet } from '../Domain/entities/Fleet'
 import { FleetIdentity } from '../Domain/valueObjects/FleetIdentity'
 import { ParkVehicleAtLocation } from './CQRS/commands/ParkVehicleAtLocation'
-import { QueryResult } from 'pg'
 import { Vehicle } from '../Domain/entities/Vehicle'
 import { VehicleIdentity } from '../Domain/valueObjects/VehicleIdentity'
 import { VehicleLocation } from '../Domain/entities/VehicleLocation'
@@ -45,7 +44,9 @@ class ParkingApp {
       }
 
       //fleet methods
-      createFleet = async (fleetIdentity: FleetIdentity): Promise<Fleet> => {
+      createFleet = async (
+            fleetIdentity: FleetIdentity
+      ): Promise<string | undefined> => {
             const createFleetHandler = new CreateFleet()
             return await createFleetHandler.execute(fleetIdentity)
       }
@@ -61,7 +62,7 @@ class ParkingApp {
       createVehicle = async (
             vehicleIdentity: VehicleIdentity,
             vehicleType: VehicleType
-      ): Promise<Vehicle> => {
+      ): Promise<number | undefined> => {
             const createVehicleHandler = new CreateVehicle()
             return await createVehicleHandler.execute(
                   vehicleIdentity,
@@ -70,11 +71,15 @@ class ParkingApp {
       }
 
       registerVehicleToFleet = async (
-            vehicle: Vehicle,
-            fleet: Fleet
-      ): Promise<QueryResult | undefined> => {
+            vehicleId: number,
+            fleetId: string
+      ): Promise<boolean | undefined> => {
             const registerVehicleToFleetHandler = new registerVehicleToFleet()
-            return await registerVehicleToFleetHandler.execute(vehicle, fleet)
+            const res = await registerVehicleToFleetHandler.execute(
+                  vehicleId,
+                  fleetId
+            )
+            return res
       }
 
       parkVehicleAtLocation = (vehicle: Vehicle, location: VehicleLocation) => {
@@ -86,13 +91,13 @@ class ParkingApp {
             return this.vehicles
       }
       verifyVehicleInFleet = async (
-            vehicle: Vehicle,
-            fleet: Fleet
-      ): Promise<QueryResult | undefined> => {
+            vehicleId: number,
+            fleetId: string
+      ): Promise<boolean> => {
             const verifyVehicleInFleetHandler = new VerifyVehicleInFleet()
             const result = await verifyVehicleInFleetHandler.execute(
-                  vehicle,
-                  fleet
+                  vehicleId,
+                  fleetId
             )
             return result
       }

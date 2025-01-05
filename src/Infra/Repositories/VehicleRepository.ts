@@ -24,10 +24,7 @@ export class VehicleRepository {
                   )
                   return res.rows[0].id
             } catch (err: unknown) {
-                  if (err instanceof Error) {
-                        console.error('Error executing query:', err.message)
-                        console.error('Detailed error:', err)
-                  }
+                  console.error('Error executing query to insert a new Vehicle')
                   return undefined
             }
       }

@@ -11,7 +11,7 @@ export class VerifyVehicleInFleet {
 
             //new repo code
             const fleetRepository = new FleetRepository()
-            let result = await fleetRepository.findVehicleInFleet(
+            let result = await fleetRepository.verifyVehicleInFleet(
                   vehicleId,
                   fleetId
             )

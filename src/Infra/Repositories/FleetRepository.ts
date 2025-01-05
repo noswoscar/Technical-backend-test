@@ -6,7 +6,9 @@ import { QueryResult } from 'pg'
 
 export class FleetRepository implements IFleetRepository {
       constructor() {}
-      find = async (fleet: Fleet) => {
+      find = async (
+            fleet: Fleet
+      ): Promise<{ fleet_id: string } | undefined> => {
             const dbConnector: DatabaseConnector =
                   DIContainer.resolve<DatabaseConnector>('dbConnector')
             const client = dbConnector.getClient()
@@ -18,15 +20,13 @@ export class FleetRepository implements IFleetRepository {
                   if (res === undefined) {
                         return undefined
                   }
-                  return res.rows[0]
-            } catch (err: any) {
-                  console.error('Error executing query:', err.message)
-                  console.error('PostgreSQL error code:', err.code)
-                  console.error('Detailed error:', err)
+                  return res.rows[0].fleet_id
+            } catch (err: unknown) {
+                  console.error('Error executing query to find a fleet')
             }
       }
-      ////wrong
-      findVehicleInFleet = async (
+
+      verifyVehicleInFleet = async (
             vehicleId: number,
             fleetId: string
       ): Promise<boolean> => {
@@ -43,10 +43,10 @@ export class FleetRepository implements IFleetRepository {
                   console.log('result of query : ', fleetVehicles)
                   if (fleetVehicles.includes(vehicleId.toString())) return true
                   return false
-            } catch (err: any) {
-                  console.error('Error executing query:', err.message)
-                  console.error('PostgreSQL error code:', err.code)
-                  console.error('Detailed error:', err)
+            } catch (err: unknown) {
+                  console.error(
+                        'Error executing query to vefify a vehicle is in a fleet'
+                  )
                   return false
             }
       }
@@ -66,10 +66,7 @@ export class FleetRepository implements IFleetRepository {
                   )
                   return res.rows[0].fleet_id
             } catch (err: unknown) {
-                  if (err instanceof Error) {
-                        console.error('Error executing query:', err.message)
-                        console.error('Detailed error:', err)
-                  }
+                  console.error('Error executing query to insert a new fleet')
                   return undefined
             }
       }
@@ -79,7 +76,7 @@ export class FleetRepository implements IFleetRepository {
       registerVehicle = async (
             vehicleId: number,
             fleetId: string
-      ): Promise<boolean | undefined> => {
+      ): Promise<boolean> => {
             const dbConnector: DatabaseConnector =
                   DIContainer.resolve<DatabaseConnector>('dbConnector')
             const client = dbConnector.getClient()
@@ -89,10 +86,10 @@ export class FleetRepository implements IFleetRepository {
                         [[vehicleId.toString()], fleetId]
                   )
                   return true
-            } catch (err: any) {
-                  console.error('Error executing query:', err.message)
-                  console.error('PostgreSQL error code:', err.code)
-                  console.error('Detailed error:', err)
+            } catch (err: unknown) {
+                  console.error(
+                        'Error executing query to update a fleet with a new vehicle'
+                  )
                   return false
             }
       }

@@ -40,7 +40,6 @@ export class FleetRepository implements IFleetRepository {
                               [fleetId]
                         )
                   const fleetVehicles = res.rows[0].vehicles
-                  console.log('result of query : ', fleetVehicles)
                   if (fleetVehicles.includes(vehicleId.toString())) return true
                   return false
             } catch (err: unknown) {

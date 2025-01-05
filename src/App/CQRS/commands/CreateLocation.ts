@@ -1,6 +1,5 @@
 import { DIContainer } from '../../DIContainer'
 import ParkingApp from '../../app'
-import { Vehicle } from '../../../Domain/entities/Vehicle'
 import { VehicleLocation } from '../../../Domain/entities/VehicleLocation'
 
 export class CreateLocation {

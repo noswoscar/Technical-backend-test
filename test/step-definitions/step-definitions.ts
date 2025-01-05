@@ -1,32 +1,23 @@
 import {
       After,
-      AfterAll,
       Before,
-      BeforeAll,
       Given,
       Then,
       When,
       setWorldConstructor,
 } from '@cucumber/cucumber'
 
-import { Fleet } from '../../src/Domain/entities/Fleet'
 import { FleetIdentity } from '../../src/Domain/valueObjects/FleetIdentity'
 import ParkingApp from '../../src/App/app'
-import { QueryResult } from 'pg'
-import { Vehicle } from '../../src/Domain/entities/Vehicle'
 import { VehicleIdentity } from '../../src/Domain/valueObjects/VehicleIdentity'
-import { VehicleLocation } from '../../src/Domain/entities/VehicleLocation'
 import { VehicleType } from '../../src/Domain/valueObjects/VehicleType'
 import assert from 'assert'
 
-// let app: ParkingApp
-// let location: VehicleLocation
-// let otherfleet: Fleet
-
 interface SharedData {
       app: ParkingApp
-      worldFleetId: string | undefined
+      myFleetId: string | undefined
       worldVehicleId: number | undefined
+      hectorsFleetId: string | undefined
 }
 class CustomWorld {
       sharedData: SharedData
@@ -34,8 +25,9 @@ class CustomWorld {
             let app = new ParkingApp()
             this.sharedData = {
                   app: app,
-                  worldFleetId: '',
+                  myFleetId: '',
                   worldVehicleId: 0,
+                  hectorsFleetId: '',
             }
       }
 
@@ -62,10 +54,10 @@ Before(async function (this: CustomWorld) {
 
 Given('my fleet', async function (this: CustomWorld) {
       let fleetIdentity: FleetIdentity = new FleetIdentity('Oscar')
-      this.sharedData.worldFleetId = await this.sharedData.app.createFleet(
+      this.sharedData.myFleetId = await this.sharedData.app.createFleet(
             fleetIdentity
       )
-      if (!this.sharedData.worldFleetId) {
+      if (!this.sharedData.myFleetId) {
             throw new Error('Failed to initialize my fleet in the database.')
       }
 })
@@ -84,16 +76,16 @@ Given('a vehicle', async function (this: CustomWorld) {
 When(
       'I register this vehicle into my fleet',
       async function (this: CustomWorld) {
-            if (!this.sharedData.worldFleetId) {
-                  throw new Error('vehicle not in the database.')
+            if (!this.sharedData.myFleetId) {
+                  throw new Error('my fleet not in the database.')
             }
             if (!this.sharedData.worldVehicleId) {
-                  throw new Error('my fleet not in the database.')
+                  throw new Error('vehicle not in the database.')
             }
             const result: boolean | undefined =
                   await this.sharedData.app.registerVehicleToFleet(
                         this.sharedData.worldVehicleId,
-                        this.sharedData.worldFleetId
+                        this.sharedData.myFleetId
                   )
             if (!result) {
                   throw new Error('Failed to register vehicle in fleet.')
@@ -104,16 +96,16 @@ When(
 Then(
       'this vehicle should be part of my vehicle fleet',
       async function (this: CustomWorld) {
-            if (!this.sharedData.worldFleetId) {
-                  throw new Error('vehicle not in the database.')
+            if (!this.sharedData.myFleetId) {
+                  throw new Error('my fleet not in the database.')
             }
             if (!this.sharedData.worldVehicleId) {
-                  throw new Error('my fleet not in the database.')
+                  throw new Error('vehicle not in the database.')
             }
             let result: boolean =
                   await this.sharedData.app.verifyVehicleInFleet(
                         this.sharedData.worldVehicleId,
-                        this.sharedData.worldFleetId
+                        this.sharedData.myFleetId
                   )
             assert.strictEqual(result, true)
       }
@@ -122,16 +114,16 @@ Then(
 Given(
       'I have registered this vehicle into my fleet',
       async function (this: CustomWorld) {
-            if (!this.sharedData.worldFleetId) {
-                  throw new Error('vehicle not in the database.')
+            if (!this.sharedData.myFleetId) {
+                  throw new Error('my fleet not in the database.')
             }
             if (!this.sharedData.worldVehicleId) {
-                  throw new Error('my fleet not in the database.')
+                  throw new Error('vehicle not in the database.')
             }
             const result: boolean =
                   await this.sharedData.app.registerVehicleToFleet(
                         this.sharedData.worldVehicleId,
-                        this.sharedData.worldFleetId
+                        this.sharedData.myFleetId
                   )
             if (!result) {
                   throw new Error('Failed to register vehicle in fleet.')
@@ -143,16 +135,16 @@ Given(
 When(
       'I try to register this vehicle into my fleet',
       async function (this: CustomWorld) {
-            if (!this.sharedData.worldFleetId) {
-                  throw new Error('vehicle not in the database.')
+            if (!this.sharedData.myFleetId) {
+                  throw new Error('my fleet not in the database.')
             }
             if (!this.sharedData.worldVehicleId) {
-                  throw new Error('my fleet not in the database.')
+                  throw new Error('vehicle not in the database.')
             }
             const result: boolean =
                   await this.sharedData.app.registerVehicleToFleet(
                         this.sharedData.worldVehicleId,
-                        this.sharedData.worldFleetId
+                        this.sharedData.myFleetId
                   )
             assert.strictEqual(result, false)
       }
@@ -170,21 +162,39 @@ Then(
       }
 )
 
-// Given('the fleet of another user', function () {
-//       let fleetIdentity: FleetIdentity = new FleetIdentity('Oscar')
-//       otherfleet = app.createFleet(fleetIdentity)
-// })
+Given('the fleet of another user', async function (this: CustomWorld) {
+      let fleetIdentity: FleetIdentity = new FleetIdentity('Hector')
+      this.sharedData.hectorsFleetId = await this.sharedData.app.createFleet(
+            fleetIdentity
+      )
+      if (!this.sharedData.myFleetId) {
+            throw new Error(
+                  "Failed to initialize Hector's fleet in the database."
+            )
+      }
+})
 
-// Given(
-//       "this vehicle has been registered into the other user's fleet",
-//       function () {
-//             app.registerVehicleToFleet(vehicle, otherfleet)
-//             assert.strictEqual(
-//                   app.verifyVehicleInFleet(vehicle, otherfleet),
-//                   true
-//             )
-//       }
-// )
+Given(
+      "this vehicle has been registered into the other user's fleet",
+      async function (this: CustomWorld) {
+            if (!this.sharedData.hectorsFleetId) {
+                  throw new Error('Hectors fleet not in the database.')
+            }
+            if (!this.sharedData.worldVehicleId) {
+                  throw new Error('vehicle not in the database.')
+            }
+            const result: boolean | undefined =
+                  await this.sharedData.app.registerVehicleToFleet(
+                        this.sharedData.worldVehicleId,
+                        this.sharedData.hectorsFleetId
+                  )
+            if (!result) {
+                  throw new Error(
+                        "Failed to register vehicle into hector's fleet."
+                  )
+            }
+      }
+)
 
 // Given('a location', function () {
 //       location = app.createLocation('12', '-60', '1000')

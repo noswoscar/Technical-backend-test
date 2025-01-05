@@ -1,25 +1,35 @@
 import { LocationRepository } from '../../Infra/Repositories/LocationRepository'
-import { Vehicle } from '../entities/Vehicle'
-import { VehicleLocation } from '../entities/VehicleLocation'
+import { VehicleRepository } from '../../Infra/Repositories/VehicleRepository'
 
 export class ParkingRequest {
       private vehicleId: number
       private locationId: string
-      private locationRepository
+      private locationRepository: LocationRepository
+      private vehicleRepository: VehicleRepository
       constructor(
             vehicleId: number,
             locationId: string,
-            locationRepository: LocationRepository
+            locationRepository: LocationRepository,
+            vehicleRepository: VehicleRepository
       ) {
             this.vehicleId = vehicleId
             this.locationId = locationId
             this.locationRepository = locationRepository
+            this.vehicleRepository = vehicleRepository
       }
 
-      parkVehicle = (): Promise<boolean> => {
-            return this.locationRepository.addVehicleToLocation(
-                  this.vehicleId,
-                  this.locationId
-            )
+      parkVehicle = async (): Promise<boolean> => {
+            const addedLocation =
+                  await this.vehicleRepository.addLocationToVehicle(
+                        this.locationId,
+                        this.vehicleId
+                  )
+            const parkedVehicle =
+                  await this.locationRepository.addVehicleToLocation(
+                        this.vehicleId,
+                        this.locationId
+                  )
+            if (addedLocation && parkedVehicle) return true
+            return false
       }
 }

@@ -3,17 +3,18 @@ import { LocationRepository } from '../../../Infra/Repositories/LocationReposito
 import ParkingApp from '../../app'
 import { ParkingRequest } from '../../../Domain/agregates/ParkingRequest'
 import { ProgramError } from '../../../Domain/entities/ProgramError'
-import { Vehicle } from '../../../Domain/entities/Vehicle'
-import { VehicleLocation } from '../../../Domain/entities/VehicleLocation'
+import { VehicleRepository } from '../../../Infra/Repositories/VehicleRepository'
 
 export class ParkVehicleAtLocation {
       async execute(vehicleId: number, locationId: string): Promise<boolean> {
             const app = DIContainer.resolve<ParkingApp>('app')
             const locationrepository = new LocationRepository()
+            const vehiclerepository = new VehicleRepository()
             const parkingRequest = new ParkingRequest(
                   vehicleId,
                   locationId,
-                  locationrepository
+                  locationrepository,
+                  vehiclerepository
             )
             try {
                   return await parkingRequest.parkVehicle()

@@ -42,16 +42,13 @@ export class LocationRepository {
             try {
                   const res: QueryResult<{ id: string }> | undefined =
                         await client.query(
-                              'INSERT INTO locations (vehicle) VALUES ($1) RETURNING *;',
-                              [vehicleId]
+                              `UPDATE locations SET vehicle = $1 WHERE id = $2;`,
+                              [vehicleId.toString(), locationId]
                         )
-                  if (res.rows[0].id) {
-                        return true
-                  }
-                  return false
+                  return true
             } catch (err: unknown) {
                   console.error(
-                        'Error executing query to insert a new Location'
+                        'Error executing query to update a Location with a vehicle'
                   )
                   return false
             }

@@ -29,6 +29,25 @@ export class VehicleRepository {
             }
       }
 
+      addLocationToVehicle = async (
+            locationId: string,
+            vehicleId: number
+      ): Promise<boolean> => {
+            const dbConnector: DatabaseConnector =
+                  DIContainer.resolve<DatabaseConnector>('dbConnector')
+            const client = dbConnector.getClient()
+            try {
+                  const res: QueryResult<{ id: number }> = await client.query(
+                        `UPDATE vehicles SET location = $1 WHERE id = $2;`,
+                        [locationId, vehicleId]
+                  )
+                  return true
+            } catch (err: unknown) {
+                  console.error('Error executing query to insert a new Vehicle')
+                  return false
+            }
+      }
+
       update = () => {}
 
       delete = () => {}

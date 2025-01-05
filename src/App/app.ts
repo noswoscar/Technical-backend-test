@@ -104,11 +104,11 @@ class ParkingApp {
       }
 
       verifyVehicleAtLocation = (
-            vehicle: Vehicle,
-            location: VehicleLocation
-      ): boolean => {
+            vehicleId: number,
+            locationId: string
+      ): Promise<boolean> => {
             const verifyVehicleAtLocationHandler = new VerifyVehicleAtLocation()
-            return verifyVehicleAtLocationHandler.execute(vehicle, location)
+            return verifyVehicleAtLocationHandler.execute(vehicleId, locationId)
       }
 
       //location methods

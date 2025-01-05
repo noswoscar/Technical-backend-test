@@ -119,27 +119,56 @@ Then(
       }
 )
 
-// Given('I have registered this vehicle into my fleet', function () {
-//       let vehicleInFleet = app.verifyVehicleInFleet(vehicle, fleet)
-//       if (!vehicleInFleet) {
-//             app.registerVehicleToFleet(vehicle, fleet)
-//       }
-//       assert.strictEqual(app.verifyVehicleInFleet(vehicle, fleet), true)
-// })
+Given(
+      'I have registered this vehicle into my fleet',
+      async function (this: CustomWorld) {
+            if (!this.sharedData.worldFleetId) {
+                  throw new Error('vehicle not in the database.')
+            }
+            if (!this.sharedData.worldVehicleId) {
+                  throw new Error('my fleet not in the database.')
+            }
+            const result: boolean =
+                  await this.sharedData.app.registerVehicleToFleet(
+                        this.sharedData.worldVehicleId,
+                        this.sharedData.worldFleetId
+                  )
+            if (!result) {
+                  throw new Error('Failed to register vehicle in fleet.')
+            }
+            assert.strictEqual(result, true)
+      }
+)
 
-// When('I try to register this vehicle into my fleet', function () {
-//       app.registerVehicleToFleet(vehicle, fleet)
-// })
+When(
+      'I try to register this vehicle into my fleet',
+      async function (this: CustomWorld) {
+            if (!this.sharedData.worldFleetId) {
+                  throw new Error('vehicle not in the database.')
+            }
+            if (!this.sharedData.worldVehicleId) {
+                  throw new Error('my fleet not in the database.')
+            }
+            const result: boolean =
+                  await this.sharedData.app.registerVehicleToFleet(
+                        this.sharedData.worldVehicleId,
+                        this.sharedData.worldFleetId
+                  )
+            assert.strictEqual(result, false)
+      }
+)
 
-// Then(
-//       'I should be informed this this vehicle has already been registered into my fleet',
-//       function () {
-//             assert.strictEqual(
-//                   app.getErrorLog().hasRecentRegistryError(Date.now()),
-//                   true
-//             )
-//       }
-// )
+Then(
+      'I should be informed this this vehicle has already been registered into my fleet',
+      async function (this: CustomWorld) {
+            assert.strictEqual(
+                  this.sharedData.app
+                        .getErrorLog()
+                        .hasRecentRegistryError(Date.now()),
+                  true
+            )
+      }
+)
 
 // Given('the fleet of another user', function () {
 //       let fleetIdentity: FleetIdentity = new FleetIdentity('Oscar')

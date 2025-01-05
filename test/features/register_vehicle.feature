@@ -18,7 +18,7 @@ Feature: Register a vehicle
         When I try to register this vehicle into my fleet
         Then I should be informed this this vehicle has already been registered into my fleet
 
-    # Scenario: Same vehicle can belong to more than one fleet
+    Scenario: Same vehicle can belong to more than one fleet
         Given my fleet
         And the fleet of another user
         And a vehicle

@@ -1,30 +1,37 @@
 import { DIContainer } from '../../DIContainer'
-import { Fleet } from '../../../Domain/entities/Fleet'
+import { ErrorLog } from '../../../Domain/agregates/ErrorLog'
+import { FleetRepository } from '../../../Infra/Repositories/FleetRepository'
 import ParkingApp from '../../app'
 import { ProgramError } from '../../../Domain/entities/ProgramError'
-import { QueryResult } from 'pg'
 import { RegistryRequest } from '../../../Domain/agregates/RegistryRequest'
-import { Vehicle } from '../../../Domain/entities/Vehicle'
 
 export class registerVehicleToFleet {
       async execute(
             vehicleId: number,
-            fleetId: string
-      ): Promise<boolean | undefined> {
+            fleetId: string,
+            errorLog: ErrorLog
+      ): Promise<boolean> {
             const app = DIContainer.resolve<ParkingApp>('app')
+            const fleetRepositiory = new FleetRepository()
+
             let registryRequest: RegistryRequest = new RegistryRequest(
                   vehicleId,
-                  fleetId
+                  fleetId,
+                  fleetRepositiory
             )
             let res: boolean | undefined
             try {
                   res = await registryRequest.registerVehicleToFleet()
                   return res
-            } catch (error: any) {
-                  let myerror = new ProgramError('RegistryError', error.message)
-                  app.getErrorLog().setError(myerror)
-                  app.getErrorLog().logError(myerror)
-                  return undefined
+            } catch (error: unknown) {
+                  //save program error here
+                  let registryError = new ProgramError(
+                        'RegistryError',
+                        'Error registring a vehicle into the fleet'
+                  )
+                  errorLog.setError(registryError)
+                  errorLog.logError(registryError)
+                  return false
             }
       }
 }

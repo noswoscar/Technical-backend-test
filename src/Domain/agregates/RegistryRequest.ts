@@ -1,23 +1,37 @@
-// import { Error } from '../entities/Error'
-import { ErrorLog } from './ErrorLog'
-import { Fleet } from '../entities/Fleet'
 import { FleetRepository } from '../../Infra/Repositories/FleetRepository'
-import { QueryResult } from 'pg'
-import { Vehicle } from '../entities/Vehicle'
 
 export class RegistryRequest {
       private vehicleId: number
       private fleetId: string
-      constructor(vehicleId: number, fleetId: string) {
+      private fleetRepository: FleetRepository
+
+      constructor(
+            vehicleId: number,
+            fleetId: string,
+            fleetRepository: FleetRepository
+      ) {
             this.vehicleId = vehicleId
             this.fleetId = fleetId
+            this.fleetRepository = fleetRepository
       }
-      registerVehicleToFleet = async (): Promise<boolean | undefined> => {
-            let fleetRepositiory = new FleetRepository()
 
-            return await fleetRepositiory.registerVehicle(
+      registerVehicleToFleet = async (): Promise<boolean> => {
+            const res = await this.isVehicleRegistered()
+
+            if (res) {
+                  throw new Error('Vehicle is already registered in the fleet.')
+            }
+            return await this.fleetRepository.registerVehicle(
                   this.vehicleId,
                   this.fleetId
             )
+      }
+
+      isVehicleRegistered = async (): Promise<boolean> => {
+            const res = await this.fleetRepository.verifyVehicleInFleet(
+                  this.vehicleId,
+                  this.fleetId
+            )
+            return res
       }
 }

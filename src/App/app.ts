@@ -73,11 +73,12 @@ class ParkingApp {
       registerVehicleToFleet = async (
             vehicleId: number,
             fleetId: string
-      ): Promise<boolean | undefined> => {
+      ): Promise<boolean> => {
             const registerVehicleToFleetHandler = new registerVehicleToFleet()
             const res = await registerVehicleToFleetHandler.execute(
                   vehicleId,
-                  fleetId
+                  fleetId,
+                  this.errorLog
             )
             return res
       }

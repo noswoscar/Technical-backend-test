@@ -1,6 +1,6 @@
-import { IRepository } from './interfaces/IRepository'
+// import { IRepository } from './interfaces/IRepository'
 
-export class ProgramErrorRepository implements IRepository {
+export class ProgramErrorRepository {
       constructor() {}
       find = () => {}
 

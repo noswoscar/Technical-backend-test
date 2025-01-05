@@ -1,6 +1,4 @@
-import { IRepository } from './interfaces/IRepository'
-
-export class VehicleLocationRepository implements IRepository {
+export class VehicleLocationRepository {
       constructor() {}
       find = () => {}
 

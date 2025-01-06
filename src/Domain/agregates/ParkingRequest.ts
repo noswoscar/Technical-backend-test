@@ -1,4 +1,5 @@
 import { LocationRepository } from '../../Infra/Repositories/LocationRepository'
+import { ProgramError } from '../entities/ProgramError'
 import { VehicleRepository } from '../../Infra/Repositories/VehicleRepository'
 
 export class ParkingRequest {
@@ -18,7 +19,18 @@ export class ParkingRequest {
             this.vehicleRepository = vehicleRepository
       }
 
+      vehicleAlreadyParkedAtLocation = async (): Promise<boolean> => {
+            const alreadyParked =
+                  await this.locationRepository.vehicleIsAtLocation(
+                        this.locationId
+                  )
+            return alreadyParked
+      }
+
       parkVehicle = async (): Promise<boolean> => {
+            if (await this.vehicleAlreadyParkedAtLocation()) {
+                  throw new Error('Vehicle is already added to this location.')
+            }
             const addedLocation =
                   await this.vehicleRepository.addLocationToVehicle(
                         this.locationId,

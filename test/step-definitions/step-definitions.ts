@@ -238,24 +238,49 @@ Then(
       }
 )
 
-// Given('my vehicle has been parked into this location', function () {
-//       app.parkVehicleAtLocation(vehicle, location)
-//       assert.strictEqual(app.verifyVehicleAtLocation(vehicle, location), true)
-// })
+Given(
+      'my vehicle has been parked into this location',
+      async function (this: CustomWorld) {
+            if (!this.sharedData.worldLocationId) {
+                  throw new Error('location not in the database.')
+            }
+            if (!this.sharedData.worldVehicleId) {
+                  throw new Error('vehicle not in the database.')
+            }
+            const result = await this.sharedData.app.parkVehicleAtLocation(
+                  this.sharedData.worldVehicleId,
+                  this.sharedData.worldLocationId
+            )
+            assert.strictEqual(result, true)
+      }
+)
 
-// When('I try to park my vehicle at this location', function () {
-//       app.parkVehicleAtLocation(vehicle, location)
-// })
+When(
+      'I try to park my vehicle at this location',
+      async function (this: CustomWorld) {
+            if (!this.sharedData.worldLocationId) {
+                  throw new Error('location not in the database.')
+            }
+            if (!this.sharedData.worldVehicleId) {
+                  throw new Error('vehicle not in the database.')
+            }
+            const result = await this.sharedData.app.parkVehicleAtLocation(
+                  this.sharedData.worldVehicleId,
+                  this.sharedData.worldLocationId
+            )
+            assert.strictEqual(result, false)
+      }
+)
 
-// Then(
-//       'I should be informed that my vehicle is already parked at this location',
-//       function () {
-//             assert.strictEqual(
-//                   app.getErrorLog().hasRecentParkingError(Date.now()),
-//                   true
-//             )
-//       }
-// )
+Then(
+      'I should be informed that my vehicle is already parked at this location',
+      async function (this: CustomWorld) {
+            const hasError = await this.sharedData.app
+                  .getErrorLog()
+                  .hasRecentParkingError(Date.now())
+            assert.strictEqual(hasError, true)
+      }
+)
 
 After(async function (this: CustomWorld) {
       try {

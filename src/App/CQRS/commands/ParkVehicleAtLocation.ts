@@ -18,8 +18,11 @@ export class ParkVehicleAtLocation {
             )
             try {
                   return await parkingRequest.parkVehicle()
-            } catch (error: any) {
-                  let myerror = new ProgramError('ParkingError', error.message)
+            } catch (error: unknown) {
+                  let myerror = new ProgramError(
+                        'ParkingError',
+                        'Error parking a vehicle at a location'
+                  )
                   app.getErrorLog().setError(myerror)
                   app.getErrorLog().logError(myerror)
                   return false

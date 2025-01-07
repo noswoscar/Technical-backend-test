@@ -7,6 +7,7 @@ export class ParkingRequest {
       private locationId: string
       private locationRepository: LocationRepository
       private vehicleRepository: VehicleRepository
+
       constructor(
             vehicleId: number,
             locationId: string,
@@ -36,12 +37,13 @@ export class ParkingRequest {
                         this.locationId,
                         this.vehicleId
                   )
+            if (!addedLocation) return false
             const parkedVehicle =
                   await this.locationRepository.addVehicleToLocation(
                         this.vehicleId,
                         this.locationId
                   )
-            if (addedLocation && parkedVehicle) return true
-            return false
+            if (!parkedVehicle) return false
+            return true
       }
 }

@@ -123,7 +123,11 @@ class ParkingApp {
 
       parkVehicleAtLocation = (vehicleId: number, locationId: string) => {
             const parkVehicleAtLocationHandler = new ParkVehicleAtLocation()
-            return parkVehicleAtLocationHandler.execute(vehicleId, locationId)
+            return parkVehicleAtLocationHandler.execute(
+                  vehicleId,
+                  locationId,
+                  this.errorLog
+            )
       }
 
       verifyVehicleInFleet = async (

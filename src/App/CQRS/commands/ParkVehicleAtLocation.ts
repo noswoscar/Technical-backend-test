@@ -1,13 +1,15 @@
-import { DIContainer } from '../../DIContainer'
+import { ErrorLog } from '../../../Domain/services/ErrorLog'
 import { LocationRepository } from '../../../Infra/Repositories/LocationRepository'
-import ParkingApp from '../../app'
 import { ParkingRequest } from '../../../Domain/services/ParkingRequest'
 import { ProgramError } from '../../../Domain/entities/ProgramError'
 import { VehicleRepository } from '../../../Infra/Repositories/VehicleRepository'
 
 export class ParkVehicleAtLocation {
-      async execute(vehicleId: number, locationId: string): Promise<boolean> {
-            const app = DIContainer.resolve<ParkingApp>('app')
+      async execute(
+            vehicleId: number,
+            locationId: string,
+            errorLog: ErrorLog
+      ): Promise<boolean> {
             const locationrepository = new LocationRepository()
             const vehiclerepository = new VehicleRepository()
             const parkingRequest = new ParkingRequest(
@@ -23,8 +25,8 @@ export class ParkVehicleAtLocation {
                         'ParkingError',
                         'Error parking a vehicle at a location'
                   )
-                  app.getErrorLog().setError(myerror)
-                  app.getErrorLog().logError(myerror)
+                  errorLog.setError(myerror)
+                  errorLog.logError(myerror)
                   return false
             }
       }

@@ -80,9 +80,7 @@ When(
                         this.sharedData.worldVehicleId,
                         this.sharedData.myFleetId
                   )
-            if (!result) {
-                  throw new Error('Failed to register vehicle in fleet.')
-            }
+            assert.strictEqual(result, true)
       }
 )
 
@@ -155,121 +153,117 @@ Then(
       }
 )
 
-// Given('the fleet of another user', async function (this: CustomWorld) {
-//       this.sharedData.hectorsFleetId =
-//             await this.sharedData.app.createOtherFleet()
-//       if (!this.sharedData.hectorsFleetId) {
-//             throw new Error(
-//                   "Failed to initialize Hector's fleet in the database."
-//             )
-//       }
-// })
+Given('the fleet of another user', async function (this: CustomWorld) {
+      this.sharedData.hectorsFleetId =
+            await this.sharedData.app.createOtherFleet()
+      if (!this.sharedData.hectorsFleetId) {
+            throw new Error(
+                  "Failed to initialize Hector's fleet in the database."
+            )
+      }
+})
 
-// Given(
-//       "this vehicle has been registered into the other user's fleet",
-//       async function (this: CustomWorld) {
-//             if (!this.sharedData.hectorsFleetId) {
-//                   throw new Error('Hectors fleet not in the database.')
-//             }
-//             if (!this.sharedData.worldVehicleId) {
-//                   throw new Error('vehicle not in the database.')
-//             }
-//             const result: boolean | undefined =
-//                   await this.sharedData.app.registerVehicleToFleet(
-//                         this.sharedData.worldVehicleId,
-//                         this.sharedData.hectorsFleetId
-//                   )
-//             if (!result) {
-//                   throw new Error(
-//                         "Failed to register vehicle into hector's fleet."
-//                   )
-//             }
-//       }
-// )
+Given(
+      "this vehicle has been registered into the other user's fleet",
+      async function (this: CustomWorld) {
+            if (!this.sharedData.hectorsFleetId) {
+                  throw new Error('Hectors fleet not in the database.')
+            }
+            if (!this.sharedData.worldVehicleId) {
+                  throw new Error('vehicle not in the database.')
+            }
+            const result: boolean | undefined =
+                  await this.sharedData.app.registerVehicleToFleet(
+                        this.sharedData.worldVehicleId,
+                        this.sharedData.hectorsFleetId
+                  )
+            assert.strictEqual(result, true)
+      }
+)
 
-// Given('a location', async function (this: CustomWorld) {
-//       this.sharedData.worldLocationId =
-//             await this.sharedData.app.createLocation('12', '-60', '1000')
-//       if (!this.sharedData.worldLocationId) {
-//             throw new Error('Failed to initialize a Location in the database.')
-//       }
-// })
+Given('a location', async function (this: CustomWorld) {
+      this.sharedData.worldLocationId =
+            await this.sharedData.app.createLocation('12', '-60', '1000')
+      if (!this.sharedData.worldLocationId) {
+            throw new Error('Failed to initialize a Location in the database.')
+      }
+})
 
-// When('I park my vehicle at this location', async function (this: CustomWorld) {
-//       if (!this.sharedData.worldLocationId) {
-//             throw new Error('location not in the database.')
-//       }
-//       if (!this.sharedData.worldVehicleId) {
-//             throw new Error('vehicle not in the database.')
-//       }
-//       const result = await this.sharedData.app.parkVehicleAtLocation(
-//             this.sharedData.worldVehicleId,
-//             this.sharedData.worldLocationId
-//       )
-//       assert.strictEqual(result, true)
-// })
+When('I park my vehicle at this location', async function (this: CustomWorld) {
+      if (!this.sharedData.worldLocationId) {
+            throw new Error('location not in the database.')
+      }
+      if (!this.sharedData.worldVehicleId) {
+            throw new Error('vehicle not in the database.')
+      }
+      const result = await this.sharedData.app.parkVehicleAtLocation(
+            this.sharedData.worldVehicleId,
+            this.sharedData.worldLocationId
+      )
+      assert.strictEqual(result, true)
+})
 
-// Then(
-//       'the known location of my vehicle should verify this location',
-//       async function async(this: CustomWorld) {
-//             if (!this.sharedData.worldLocationId) {
-//                   throw new Error('location not in the database.')
-//             }
-//             if (!this.sharedData.worldVehicleId) {
-//                   throw new Error('vehicle not in the database.')
-//             }
-//             const result: boolean =
-//                   await this.sharedData.app.verifyVehicleAtLocation(
-//                         this.sharedData.worldVehicleId,
-//                         this.sharedData.worldLocationId
-//                   )
-//             assert.strictEqual(result, true)
-//       }
-// )
+Then(
+      'the known location of my vehicle should verify this location',
+      async function async(this: CustomWorld) {
+            if (!this.sharedData.worldLocationId) {
+                  throw new Error('location not in the database.')
+            }
+            if (!this.sharedData.worldVehicleId) {
+                  throw new Error('vehicle not in the database.')
+            }
+            const result: boolean =
+                  await this.sharedData.app.verifyVehicleAtLocation(
+                        this.sharedData.worldVehicleId,
+                        this.sharedData.worldLocationId
+                  )
+            assert.strictEqual(result, true)
+      }
+)
 
-// Given(
-//       'my vehicle has been parked into this location',
-//       async function (this: CustomWorld) {
-//             if (!this.sharedData.worldLocationId) {
-//                   throw new Error('location not in the database.')
-//             }
-//             if (!this.sharedData.worldVehicleId) {
-//                   throw new Error('vehicle not in the database.')
-//             }
-//             const result = await this.sharedData.app.parkVehicleAtLocation(
-//                   this.sharedData.worldVehicleId,
-//                   this.sharedData.worldLocationId
-//             )
-//             assert.strictEqual(result, true)
-//       }
-// )
+Given(
+      'my vehicle has been parked into this location',
+      async function (this: CustomWorld) {
+            if (!this.sharedData.worldLocationId) {
+                  throw new Error('location not in the database.')
+            }
+            if (!this.sharedData.worldVehicleId) {
+                  throw new Error('vehicle not in the database.')
+            }
+            const result = await this.sharedData.app.parkVehicleAtLocation(
+                  this.sharedData.worldVehicleId,
+                  this.sharedData.worldLocationId
+            )
+            assert.strictEqual(result, true)
+      }
+)
 
-// When(
-//       'I try to park my vehicle at this location',
-//       async function (this: CustomWorld) {
-//             if (!this.sharedData.worldLocationId) {
-//                   throw new Error('location not in the database.')
-//             }
-//             if (!this.sharedData.worldVehicleId) {
-//                   throw new Error('vehicle not in the database.')
-//             }
-//             const result = await this.sharedData.app.parkVehicleAtLocation(
-//                   this.sharedData.worldVehicleId,
-//                   this.sharedData.worldLocationId
-//             )
-//             assert.strictEqual(result, false)
-//       }
-// )
+When(
+      'I try to park my vehicle at this location',
+      async function (this: CustomWorld) {
+            if (!this.sharedData.worldLocationId) {
+                  throw new Error('location not in the database.')
+            }
+            if (!this.sharedData.worldVehicleId) {
+                  throw new Error('vehicle not in the database.')
+            }
+            const result = await this.sharedData.app.parkVehicleAtLocation(
+                  this.sharedData.worldVehicleId,
+                  this.sharedData.worldLocationId
+            )
+            assert.strictEqual(result, false)
+      }
+)
 
-// Then(
-//       'I should be informed that my vehicle is already parked at this location',
-//       async function (this: CustomWorld) {
-//             const hasError = await this.sharedData.app
-//                   .getErrorLog()
-//                   .hasRecentParkingError(Date.now())
-//             assert.strictEqual(hasError, true)
-//       }
-// )
+Then(
+      'I should be informed that my vehicle is already parked at this location',
+      async function (this: CustomWorld) {
+            const hasError = await this.sharedData.app
+                  .getErrorLog()
+                  .hasRecentParkingError(Date.now())
+            assert.strictEqual(hasError, true)
+      }
+)
 
 After(async function (this: CustomWorld) {
       try {

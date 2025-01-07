@@ -5,7 +5,6 @@ import { VehicleRepository } from '../../../Infra/Repositories/VehicleRepository
 
 export class VerifyVehicleAtLocation {
       async execute(vehicleId: number, locationId: string): Promise<boolean> {
-            const app = DIContainer.resolve<ParkingApp>('app')
             const vehicleRepository = new VehicleRepository()
             const vehicleLocation = await vehicleRepository.getVehicleLocation(
                   vehicleId

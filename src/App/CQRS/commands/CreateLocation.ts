@@ -11,9 +11,13 @@ export class CreateLocation {
       ): Promise<string | undefined> {
             const app = DIContainer.resolve<ParkingApp>('app')
             let location = new VehicleLocation(latitude, longitude, altitude)
-            const locationRepositoryHandler = new LocationRepository()
-            const result: string | undefined =
-                  await locationRepositoryHandler.insert(location)
+            const locationRepository = new LocationRepository()
+            const result: string | undefined = await locationRepository.insert(
+                  location
+            )
+            if (!result) {
+                  return undefined
+            }
             return result
       }
 }

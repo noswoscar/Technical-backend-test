@@ -1,10 +1,9 @@
-import { DIContainer } from '../../DIContainer'
-import ParkingApp from '../../app'
+import { VehicleRepository } from '../../../Infra/Repositories/VehicleRepository'
 
-export class getVehicles {
-      execute() {
-            const app = DIContainer.resolve<ParkingApp>('app')
-
-            return app.getVehicles()
+export class getVehicle {
+      async execute(vehicleId: number) {
+            const vehicleRepository = new VehicleRepository()
+            const vehicle = await vehicleRepository.find(vehicleId)
+            return
       }
 }

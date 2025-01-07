@@ -34,8 +34,6 @@ export class VehicleRepository {
             const client = dbConnector.getClient()
             try {
                   const vehicleIdentity = vehicle.getVehicleIdentity()
-                  console.log(vehicleIdentity.getVehiclePlateNumber())
-                  console.log(vehicle.getLocationId())
                   const res: QueryResult<{ id: number }> = await client.query(
                         'INSERT INTO vehicles (number_plate, type, location, created_at) VALUES ($1, $2, $3, NOW()) RETURNING *;',
                         [

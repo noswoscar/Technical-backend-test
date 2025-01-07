@@ -15,14 +15,15 @@ import { VerifyVehicleInFleet } from './CQRS/queries/VerifyVehicleInFleet'
 import { registerVehicleToFleet } from './CQRS/commands/RegisterVehicleToFleet'
 
 class ParkingApp {
+      private vehicleIds: Array<number>
       private fleets: Array<Fleet>
       private locations: Array<VehicleLocation>
-      private vehicles: Array<Vehicle>
       private errorLog: ErrorLog
+
       constructor() {
             console.log('Welcome to my parking app')
+            this.vehicleIds = []
             this.fleets = []
-            this.vehicles = []
             this.locations = []
             this.errorLog = new ErrorLog()
             DIContainer.register('app', this)
@@ -47,22 +48,35 @@ class ParkingApp {
             let fleetIdentity: FleetIdentity = new FleetIdentity('Oscar')
             const createFleetHandler = new CreateFleet()
 
-            return await createFleetHandler.execute(fleetIdentity)
+            const fleet = new Fleet(fleetIdentity, [])
+            let fleetId = await createFleetHandler.execute(fleet)
+            if (fleetId) {
+                  this.fleets.push(fleet)
+                  return fleetId
+            }
+            return undefined
       }
 
       createOtherFleet = async (): Promise<string | undefined> => {
             let fleetIdentity: FleetIdentity = new FleetIdentity('Hector')
             const createFleetHandler = new CreateFleet()
 
-            return await createFleetHandler.execute(fleetIdentity)
+            const fleet = new Fleet(fleetIdentity, [])
+            let fleetId = await createFleetHandler.execute(fleet)
+            if (fleetId) {
+                  this.fleets.push(fleet)
+                  return fleetId
+            }
+            return undefined
       }
 
-      getFleets = () => {
+      getFleets = (): Array<Fleet> => {
             return this.fleets
       }
+
       getFleet = (fleetId: string): Fleet | undefined => {
             return this.fleets.find(
-                  (fleet) => fleet.getFleetidentity().getId() === fleetId
+                  (appFleet) => appFleet.getIdentity().getId() === fleetId
             )
       }
 
@@ -70,18 +84,38 @@ class ParkingApp {
       createVehicle = async (): Promise<number | undefined> => {
             const vehicleIdentity: VehicleIdentity = new VehicleIdentity()
             const createVehicleHandler = new CreateVehicle()
-
-            return await createVehicleHandler.execute(vehicleIdentity)
+            const createLocationHandler = new CreateLocation()
+            const createdLocationId = await createLocationHandler.execute(
+                  '0',
+                  '0',
+                  '300'
+            )
+            if (!createdLocationId) {
+                  return undefined
+            }
+            const vehicle = new Vehicle(vehicleIdentity, createdLocationId)
+            const vehicleId: number | undefined =
+                  await createVehicleHandler.execute(vehicle)
+            if (vehicleId) {
+                  this.vehicleIds.push(vehicleId)
+                  return vehicleId
+            }
+            return undefined
       }
 
       registerVehicleToFleet = async (
             vehicleId: number,
             fleetId: string
       ): Promise<boolean> => {
+            const fleet = this.getFleet(fleetId)
+            if (!fleet) {
+                  return false
+            }
             const registerVehicleToFleetHandler = new registerVehicleToFleet()
+
             const res = await registerVehicleToFleetHandler.execute(
                   vehicleId,
-                  fleetId,
+                  fleet,
                   this.errorLog
             )
             return res
@@ -92,17 +126,20 @@ class ParkingApp {
             return parkVehicleAtLocationHandler.execute(vehicleId, locationId)
       }
 
-      getVehicles = () => {
-            return this.vehicles
-      }
       verifyVehicleInFleet = async (
             vehicleId: number,
             fleetId: string
       ): Promise<boolean> => {
+            const fleet = this.fleets.find(
+                  (fleet) => fleet.getIdentity().getId() === fleetId
+            )
+            if (!fleet) {
+                  return false
+            }
             const verifyVehicleInFleetHandler = new VerifyVehicleInFleet()
             const result = await verifyVehicleInFleetHandler.execute(
                   vehicleId,
-                  fleetId
+                  fleet
             )
             return result
       }

@@ -17,6 +17,7 @@ interface SharedData {
       hectorsFleetId: string | undefined
       worldLocationId: string | undefined
 }
+
 class CustomWorld {
       sharedData: SharedData
       constructor() {
@@ -65,94 +66,94 @@ Given('a vehicle', async function (this: CustomWorld) {
       }
 })
 
-// When(
-//       'I register this vehicle into my fleet',
-//       async function (this: CustomWorld) {
-//             if (!this.sharedData.myFleetId) {
-//                   throw new Error('my fleet not in the database.')
-//             }
-//             if (!this.sharedData.worldVehicleId) {
-//                   throw new Error('vehicle not in the database.')
-//             }
-//             const result: boolean | undefined =
-//                   await this.sharedData.app.registerVehicleToFleet(
-//                         this.sharedData.worldVehicleId,
-//                         this.sharedData.myFleetId
-//                   )
-//             if (!result) {
-//                   throw new Error('Failed to register vehicle in fleet.')
-//             }
-//       }
-// )
+When(
+      'I register this vehicle into my fleet',
+      async function (this: CustomWorld) {
+            if (!this.sharedData.myFleetId) {
+                  throw new Error('my fleet not in the database.')
+            }
+            if (!this.sharedData.worldVehicleId) {
+                  throw new Error('vehicle not in the database.')
+            }
+            const result: boolean | undefined =
+                  await this.sharedData.app.registerVehicleToFleet(
+                        this.sharedData.worldVehicleId,
+                        this.sharedData.myFleetId
+                  )
+            if (!result) {
+                  throw new Error('Failed to register vehicle in fleet.')
+            }
+      }
+)
 
-// Then(
-//       'this vehicle should be part of my vehicle fleet',
-//       async function (this: CustomWorld) {
-//             if (!this.sharedData.myFleetId) {
-//                   throw new Error('my fleet not in the database.')
-//             }
-//             if (!this.sharedData.worldVehicleId) {
-//                   throw new Error('vehicle not in the database.')
-//             }
-//             let result: boolean =
-//                   await this.sharedData.app.verifyVehicleInFleet(
-//                         this.sharedData.worldVehicleId,
-//                         this.sharedData.myFleetId
-//                   )
-//             assert.strictEqual(result, true)
-//       }
-// )
+Then(
+      'this vehicle should be part of my vehicle fleet',
+      async function (this: CustomWorld) {
+            if (!this.sharedData.myFleetId) {
+                  throw new Error('my fleet not in the database.')
+            }
+            if (!this.sharedData.worldVehicleId) {
+                  throw new Error('vehicle not in the database.')
+            }
+            let result: boolean =
+                  await this.sharedData.app.verifyVehicleInFleet(
+                        this.sharedData.worldVehicleId,
+                        this.sharedData.myFleetId
+                  )
+            assert.strictEqual(result, true)
+      }
+)
 
-// Given(
-//       'I have registered this vehicle into my fleet',
-//       async function (this: CustomWorld) {
-//             if (!this.sharedData.myFleetId) {
-//                   throw new Error('my fleet not in the database.')
-//             }
-//             if (!this.sharedData.worldVehicleId) {
-//                   throw new Error('vehicle not in the database.')
-//             }
-//             const result: boolean =
-//                   await this.sharedData.app.registerVehicleToFleet(
-//                         this.sharedData.worldVehicleId,
-//                         this.sharedData.myFleetId
-//                   )
-//             if (!result) {
-//                   throw new Error('Failed to register vehicle in fleet.')
-//             }
-//             assert.strictEqual(result, true)
-//       }
-// )
+Given(
+      'I have registered this vehicle into my fleet',
+      async function (this: CustomWorld) {
+            if (!this.sharedData.myFleetId) {
+                  throw new Error('my fleet not in the database.')
+            }
+            if (!this.sharedData.worldVehicleId) {
+                  throw new Error('vehicle not in the database.')
+            }
+            const result: boolean =
+                  await this.sharedData.app.registerVehicleToFleet(
+                        this.sharedData.worldVehicleId,
+                        this.sharedData.myFleetId
+                  )
+            if (!result) {
+                  throw new Error('Failed to register vehicle in fleet.')
+            }
+            assert.strictEqual(result, true)
+      }
+)
 
-// When(
-//       'I try to register this vehicle into my fleet',
-//       async function (this: CustomWorld) {
-//             if (!this.sharedData.myFleetId) {
-//                   throw new Error('my fleet not in the database.')
-//             }
-//             if (!this.sharedData.worldVehicleId) {
-//                   throw new Error('vehicle not in the database.')
-//             }
-//             const result: boolean =
-//                   await this.sharedData.app.registerVehicleToFleet(
-//                         this.sharedData.worldVehicleId,
-//                         this.sharedData.myFleetId
-//                   )
-//             assert.strictEqual(result, false)
-//       }
-// )
+When(
+      'I try to register this vehicle into my fleet',
+      async function (this: CustomWorld) {
+            if (!this.sharedData.myFleetId) {
+                  throw new Error('my fleet not in the database.')
+            }
+            if (!this.sharedData.worldVehicleId) {
+                  throw new Error('vehicle not in the database.')
+            }
+            const result: boolean =
+                  await this.sharedData.app.registerVehicleToFleet(
+                        this.sharedData.worldVehicleId,
+                        this.sharedData.myFleetId
+                  )
+            assert.strictEqual(result, false)
+      }
+)
 
-// Then(
-//       'I should be informed this this vehicle has already been registered into my fleet',
-//       async function (this: CustomWorld) {
-//             assert.strictEqual(
-//                   this.sharedData.app
-//                         .getErrorLog()
-//                         .hasRecentRegistryError(Date.now()),
-//                   true
-//             )
-//       }
-// )
+Then(
+      'I should be informed this this vehicle has already been registered into my fleet',
+      async function (this: CustomWorld) {
+            assert.strictEqual(
+                  this.sharedData.app
+                        .getErrorLog()
+                        .hasRecentRegistryError(Date.now()),
+                  true
+            )
+      }
+)
 
 // Given('the fleet of another user', async function (this: CustomWorld) {
 //       this.sharedData.hectorsFleetId =

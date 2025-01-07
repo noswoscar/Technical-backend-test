@@ -7,25 +7,12 @@ import { VehicleLocation } from '../../../Domain/entities/VehicleLocation'
 import { VehicleRepository } from '../../../Infra/Repositories/VehicleRepository'
 
 export class CreateVehicle {
-      async execute(
-            vehicleIdentity: VehicleIdentity
-      ): Promise<number | undefined> {
-            const app = DIContainer.resolve<ParkingApp>('app')
-            let location = new VehicleLocation('0', '0', '340')
-
-            const locationRepository = new LocationRepository()
-            let createdLocationId = await locationRepository.insert(location)
-            if (!createdLocationId) {
-                  return undefined
-            }
-            let vehicle = new Vehicle(vehicleIdentity, createdLocationId)
-
-            //memory code
-            app.getVehicles().push(vehicle)
-
-            //db code
+      async execute(vehicle: Vehicle): Promise<number | undefined> {
             const vehicleRepository = new VehicleRepository()
-            let res = await vehicleRepository.insert(vehicle)
+            let res: number | undefined = await vehicleRepository.insert(
+                  vehicle
+            )
+
             if (!res) {
                   return undefined
             } else {

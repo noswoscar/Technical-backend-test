@@ -12,7 +12,10 @@ export class registerVehicleToFleet {
 
             const vehicleRegistered = fleet.registerVehicle(vehicleId, errorLog)
             if (vehicleRegistered) {
-                  const registryResult = await fleetRepositiory.insert(fleet)
+                  const registryResult = await fleetRepositiory.registerVehicle(
+                        vehicleId,
+                        fleet.getIdentity().getId()
+                  )
                   if (registryResult) {
                         return true
                   }

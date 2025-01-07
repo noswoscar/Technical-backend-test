@@ -70,6 +70,18 @@ class ParkingApp {
             return undefined
       }
 
+      createFleet = async (fleetIdentity: FleetIdentity) => {
+            const createFleetHandler = new CreateFleet()
+
+            const fleet = new Fleet(fleetIdentity, [])
+            let fleetId = await createFleetHandler.execute(fleet)
+            if (fleetId) {
+                  this.fleets.push(fleet)
+                  return fleetId
+            }
+            return undefined
+      }
+
       getFleets = (): Array<Fleet> => {
             return this.fleets
       }

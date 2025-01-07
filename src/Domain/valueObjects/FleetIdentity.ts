@@ -16,4 +16,8 @@ export class FleetIdentity {
       getUserName = () => {
             return this.userName
       }
+
+      getowner = () => {
+            return this.owner
+      }
 }

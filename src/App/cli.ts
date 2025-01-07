@@ -1,60 +1,48 @@
 #!/usr/bin/env node
 
-// import { Command } from 'commander'
-// import { FleetIdentity } from '../Domain/valueObjects/FleetIdentity'
-// import ParkingApp from './app'
-// import { VehicleIdentity } from '../Domain/valueObjects/VehicleIdentity'
-// import { VehicleLocation } from '../Domain/entities/VehicleLocation'
-// import { VehicleType } from '../Domain/valueObjects/VehicleType'
+import { Command } from 'commander'
+import { FleetIdentity } from '../Domain/valueObjects/FleetIdentity'
+import ParkingApp from './app'
+import { VehicleIdentity } from '../Domain/valueObjects/VehicleIdentity'
+import { VehicleLocation } from '../Domain/entities/VehicleLocation'
+import { VehicleType } from '../Domain/valueObjects/VehicleType'
 
-// const cliApp = async () => {
-//       const parkingApp = new ParkingApp()
-//       await parkingApp.init()
+const cliApp = async () => {
+      const parkingApp = new ParkingApp()
+      await parkingApp.init()
 
-//       const program = new Command()
+      const program = new Command()
 
-//       // Create Fleet Command
-//       program
-//             .command('create <userId>')
-//             .description('Create a new fleet for the user')
-//             .action(async (userId) => {
-//                   const fleetIdentity = new FleetIdentity(userId)
-//                   const fleet = await parkingApp.createFleet(fleetIdentity)
-//                   if (fleet === undefined) {
-//                         console.log(`Error creating fleet`)
-//                         return
-//                   }
-//                   console.log(`Fleet created with ID: ${fleet.getFleetId()}`)
-//                   process.exit(0)
-//             })
-//       program.parse(process.argv)
-// }
+      // Create Fleet Command
+      program
+            .command('create <userId>')
+            .description('Create a new fleet for the user')
+            .action(async (userId) => {
+                  const fleetIdentity = new FleetIdentity(userId)
+                  const fleetId: string | undefined =
+                        await parkingApp.createFleet(fleetIdentity)
+                  if (fleetId === undefined) {
+                        console.log(`Error creating fleet`)
+                        return
+                  }
+                  console.log(`Fleet created with ID: ${fleetId}`)
+                  process.exit(0)
+            })
+      // // Register Vehicle Command
+      // program
+      //       .command('register-vehicle <fleetId> <vehiclePlateNumber>')
+      //       .description('Register a vehicle to the fleet')
+      //       .action(async (fleetId, vehiclePlateNumber) => {
+      //             //all vehicles should have a unique number plate
+      //             //get vehicle Id from number plate
+      //             //verifyvehicleInFleet(vehicleId, fleetId)
+      //             //if vehicle in fleet then i should be informed vehicle in fleet
+      //             //if not in fleet, register vehicle to fleet
+      //       })
+      program.parse(process.argv)
+}
 
-// cliApp()
-
-// // Register Vehicle Command
-// program
-//       .command('register-vehicle <fleetId> <vehiclePlateNumber>')
-//       .description('Register a vehicle to the fleet')
-//       .action((fleetId, vehiclePlateNumber) => {
-//             const fleet = parkingApp.getFleet(fleetId)
-//             if (fleet) {
-//                   const vehicleIdentity = new VehicleIdentity(
-//                         vehiclePlateNumber
-//                   )
-//                   const vehicleType = VehicleType.Car
-//                   const vehicle = parkingApp.createVehicle(
-//                         vehicleIdentity,
-//                         vehicleType
-//                   )
-//                   parkingApp.registerVehicleToFleet(vehicle, fleet)
-//                   console.log(
-//                         `Vehicle ${vehiclePlateNumber} registered to fleet ${fleetId}`
-//                   )
-//             } else {
-//                   console.error(`Fleet with ID ${fleetId} not found.`)
-//             }
-//       })
+cliApp()
 
 // // Localize Vehicle Command
 // program

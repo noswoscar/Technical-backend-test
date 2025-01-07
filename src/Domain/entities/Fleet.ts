@@ -10,21 +10,6 @@ export class Fleet {
             this.vehicles = vehicles
       }
 
-      getFleetId = () => {
-            return this.fleetIdentity.getId()
-      }
-
-      getFleetName = () => {
-            return this.fleetIdentity.getUserName()
-      }
-
-      getVehiclesPlates = () => {
-            let numberPlates = this.vehicles.map((vehicle) =>
-                  vehicle.getVehicleNumberPlate()
-            )
-            return numberPlates
-      }
-
       getVehicles = () => {
             return this.vehicles
       }
@@ -37,12 +22,27 @@ export class Fleet {
             if (
                   this.vehicles.find(
                         (vehicleItem) =>
-                              vehicleItem.getVehicleNumberPlate() ===
-                              vehicle.getVehicleNumberPlate()
+                              vehicleItem
+                                    .getVehicleIdentity()
+                                    .getVehiclePlateNumber() ===
+                              vehicle
+                                    .getVehicleIdentity()
+                                    .getVehiclePlateNumber()
                   )
             ) {
                   return true
             }
             return false
+      }
+
+      getFleetidentity = () => {
+            return this.fleetIdentity
+      }
+
+      getVehiclesPlateNumbers = () => {
+            let numberPlates = this.vehicles.map((vehicle) =>
+                  vehicle.getVehicleIdentity().getVehiclePlateNumber()
+            )
+            return numberPlates
       }
 }

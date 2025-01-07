@@ -1,35 +1,23 @@
 import { VehicleIdentity } from '../valueObjects/VehicleIdentity'
-import { VehicleLocation } from './VehicleLocation'
-import { VehicleType } from '../valueObjects/VehicleType'
 
 export class Vehicle {
       private vehicleIdentity: VehicleIdentity
-      private location: VehicleLocation
-      private vehicleType: VehicleType
+      private locationId: string
 
-      constructor(
-            vehicleIdentity: VehicleIdentity,
-            location: VehicleLocation,
-            vehicleType: VehicleType
-      ) {
+      constructor(vehicleIdentity: VehicleIdentity, locationId: string) {
             this.vehicleIdentity = vehicleIdentity
-            this.location = location
-            this.vehicleType = vehicleType
+            this.locationId = locationId
       }
 
-      getVehicleNumberPlate = () => {
-            return this.vehicleIdentity.getVehicleNumberPlate()
+      setLocationId = (locationId: string) => {
+            this.locationId = locationId
       }
 
-      setLocation = (location: VehicleLocation) => {
-            this.location = location
+      getLocationId = () => {
+            return this.locationId
       }
 
-      getLocation = () => {
-            return this.location
-      }
-
-      getVehicleType = () => {
-            return this.vehicleType
+      getVehicleIdentity = () => {
+            return this.vehicleIdentity
       }
 }

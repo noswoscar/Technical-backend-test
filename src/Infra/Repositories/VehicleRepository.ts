@@ -33,14 +33,15 @@ export class VehicleRepository {
                   DIContainer.resolve<DatabaseConnector>('dbConnector')
             const client = dbConnector.getClient()
             try {
+                  const vehicleIdentity = vehicle.getVehicleIdentity()
+                  console.log(vehicleIdentity.getVehiclePlateNumber())
+                  console.log(vehicle.getLocationId())
                   const res: QueryResult<{ id: number }> = await client.query(
-                        'INSERT INTO vehicles (number_plate, latitude, longitude, altitude, type, created_at) VALUES ($1, $2, $3, $4, $5, NOW()) RETURNING id;',
+                        'INSERT INTO vehicles (number_plate, type, location, created_at) VALUES ($1, $2, $3, NOW()) RETURNING *;',
                         [
-                              vehicle.getVehicleNumberPlate(),
-                              vehicle.getLocation().getCoordinates().latitude,
-                              vehicle.getLocation().getCoordinates().longitude,
-                              vehicle.getLocation().getCoordinates().altitude,
-                              vehicle.getVehicleType(),
+                              vehicleIdentity.getVehiclePlateNumber(),
+                              vehicleIdentity.getVehicleType(),
+                              vehicle.getLocationId(),
                         ]
                   )
                   return res.rows[0].id

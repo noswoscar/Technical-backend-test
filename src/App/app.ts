@@ -44,10 +44,17 @@ class ParkingApp {
       }
 
       //fleet methods
-      createFleet = async (
-            fleetIdentity: FleetIdentity
-      ): Promise<string | undefined> => {
+      createMyFleet = async (): Promise<string | undefined> => {
+            let fleetIdentity: FleetIdentity = new FleetIdentity('Oscar')
             const createFleetHandler = new CreateFleet()
+
+            return await createFleetHandler.execute(fleetIdentity)
+      }
+
+      createOtherFleet = async (): Promise<string | undefined> => {
+            let fleetIdentity: FleetIdentity = new FleetIdentity('Hector')
+            const createFleetHandler = new CreateFleet()
+
             return await createFleetHandler.execute(fleetIdentity)
       }
 
@@ -55,19 +62,17 @@ class ParkingApp {
             return this.fleets
       }
       getFleet = (fleetId: string): Fleet | undefined => {
-            return this.fleets.find((fleet) => fleet.getFleetId() === fleetId)
+            return this.fleets.find(
+                  (fleet) => fleet.getFleetidentity().getId() === fleetId
+            )
       }
 
       //vehicle methods
-      createVehicle = async (
-            vehicleIdentity: VehicleIdentity,
-            vehicleType: VehicleType
-      ): Promise<number | undefined> => {
+      createVehicle = async (): Promise<number | undefined> => {
+            const vehicleIdentity: VehicleIdentity = new VehicleIdentity()
             const createVehicleHandler = new CreateVehicle()
-            return await createVehicleHandler.execute(
-                  vehicleIdentity,
-                  vehicleType
-            )
+
+            return await createVehicleHandler.execute(vehicleIdentity)
       }
 
       registerVehicleToFleet = async (

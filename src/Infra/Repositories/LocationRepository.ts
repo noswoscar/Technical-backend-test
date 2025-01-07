@@ -16,7 +16,7 @@ export class LocationRepository {
             try {
                   const res: QueryResult<{ id: string }> | undefined =
                         await client.query(
-                              'INSERT INTO locations (latitude, longitude, altitude) VALUES ($1, $2, $3) RETURNING *;',
+                              'INSERT INTO locations (latitude, longitude, altitude) VALUES ($1, $2, $3) RETURNING id;',
                               [
                                     location.getCoordinates().latitude,
                                     location.getCoordinates().longitude,

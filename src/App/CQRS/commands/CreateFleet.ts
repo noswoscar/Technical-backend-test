@@ -8,21 +8,6 @@ export class CreateFleet {
       async execute(fleetIdentity: FleetIdentity): Promise<string | undefined> {
             const app = DIContainer.resolve<ParkingApp>('app')
             const fleet = new Fleet(fleetIdentity, [])
-
-            //old memory code
-            if (
-                  !app
-                        .getFleets()
-                        .find(
-                              (fleetItem) =>
-                                    fleetItem.getFleetId() ===
-                                    fleet.getFleetId()
-                        )
-            ) {
-                  app.getFleets().push(fleet)
-            }
-
-            //new db code
             const fleetRepository = new FleetRepository()
 
             const res = await fleetRepository.insert(fleet)

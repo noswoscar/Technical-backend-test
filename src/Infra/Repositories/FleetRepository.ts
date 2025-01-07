@@ -15,7 +15,7 @@ export class FleetRepository implements IFleetRepository {
             try {
                   const res = await client.query(
                         'select * from fleets where fleet_id = $1',
-                        [fleet.getFleetId()]
+                        [fleet.getFleetidentity().getId()]
                   )
                   if (res === undefined) {
                         return undefined
@@ -55,12 +55,13 @@ export class FleetRepository implements IFleetRepository {
                   DIContainer.resolve<DatabaseConnector>('dbConnector')
             const client = dbConnector.getClient()
             try {
+                  const fleetIdentity = fleet.getFleetidentity()
                   const res = await client.query(
                         'INSERT INTO fleets (fleet_id, fleet_name, created_at, vehicles) VALUES ($1, $2, NOW(), $3) RETURNING fleet_id;',
                         [
-                              fleet.getFleetId(),
-                              fleet.getFleetName(),
-                              fleet.getVehiclesPlates(),
+                              fleetIdentity.getId(),
+                              fleetIdentity.getUserName(),
+                              fleet.getVehiclesPlateNumbers(),
                         ]
                   )
                   return res.rows[0].fleet_id

@@ -1,5 +1,4 @@
 import { Coordinates } from '../valueObjects/Coordinates'
-import { Vehicle } from './Vehicle'
 
 export class VehicleLocation {
       private coordinates: Coordinates

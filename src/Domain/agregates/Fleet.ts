@@ -1,5 +1,5 @@
 import { FleetIdentity } from '../valueObjects/FleetIdentity'
-import { Vehicle } from './Vehicle'
+import { Vehicle } from '../entities/Vehicle'
 
 export class Fleet {
       private fleetIdentity: FleetIdentity

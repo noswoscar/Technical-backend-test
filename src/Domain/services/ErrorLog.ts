@@ -1,6 +1,4 @@
-import { Fleet } from '../entities/Fleet'
 import { ProgramError } from '../entities/ProgramError'
-import { Vehicle } from '../entities/Vehicle'
 
 const diff = (a: number, b: number) => {
       return Math.abs(a - b)

@@ -1,7 +1,7 @@
 import { DIContainer } from '../../DIContainer'
 import { LocationRepository } from '../../../Infra/Repositories/LocationRepository'
 import ParkingApp from '../../app'
-import { ParkingRequest } from '../../../Domain/agregates/ParkingRequest'
+import { ParkingRequest } from '../../../Domain/services/ParkingRequest'
 import { ProgramError } from '../../../Domain/entities/ProgramError'
 import { VehicleRepository } from '../../../Infra/Repositories/VehicleRepository'
 

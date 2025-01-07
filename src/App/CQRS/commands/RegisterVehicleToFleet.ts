@@ -1,9 +1,9 @@
 import { DIContainer } from '../../DIContainer'
-import { ErrorLog } from '../../../Domain/agregates/ErrorLog'
+import { ErrorLog } from '../../../Domain/services/ErrorLog'
 import { FleetRepository } from '../../../Infra/Repositories/FleetRepository'
 import ParkingApp from '../../app'
 import { ProgramError } from '../../../Domain/entities/ProgramError'
-import { RegistryRequest } from '../../../Domain/agregates/RegistryRequest'
+import { RegistryRequest } from '../../../Domain/services/RegistryRequest'
 
 export class registerVehicleToFleet {
       async execute(

@@ -1,6 +1,6 @@
 import { DIContainer } from '../../App/DIContainer'
 import { DatabaseConnector } from '../DatabaseConnector'
-import { Fleet } from '../../Domain/entities/Fleet'
+import { Fleet } from '../../Domain/agregates/Fleet'
 import { IFleetRepository } from './interfaces/IFleetRepository'
 import { QueryResult } from 'pg'
 

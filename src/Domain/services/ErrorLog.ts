@@ -12,7 +12,12 @@ export class ErrorLog {
             this.errors.push(error)
       }
       logError = (error: ProgramError) => {
-            console.error(error.getErrorMessage())
+            console.error(
+                  'App',
+                  error.getErrorType(),
+                  'error :',
+                  error.getErrorMessage()
+            )
       }
       getLastError = () => {
             return this.errors[this.errors.length - 1]

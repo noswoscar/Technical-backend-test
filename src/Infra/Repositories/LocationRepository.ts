@@ -1,11 +1,11 @@
 import { DIContainer } from '../../App/DIContainer'
 import { DatabaseConnector } from '../DatabaseConnector'
+import { ILocationRepository } from './interfaces/ILocationRepository'
 import { QueryResult } from 'pg'
 import { VehicleLocation } from '../../Domain/entities/VehicleLocation'
 
-export class LocationRepository {
+export class LocationRepository implements ILocationRepository {
       constructor() {}
-      find = () => {}
 
       insert = async (
             location: VehicleLocation
@@ -94,8 +94,4 @@ export class LocationRepository {
                   return undefined
             }
       }
-
-      update = () => {}
-
-      delete = () => {}
 }

@@ -21,7 +21,6 @@ class ParkingApp {
       private errorLog: ErrorLog
 
       constructor() {
-            console.log('Welcome to my parking app')
             this.vehicleIds = []
             this.fleets = []
             this.errorLog = new ErrorLog()
@@ -160,12 +159,7 @@ class ParkingApp {
                         this.errorLog
                   )
             if (!res) {
-                  console.error(
-                        'Unable to register',
-                        vehiclePlateNumber,
-                        ' to fleet',
-                        fleet.getFleetIdentity().getId()
-                  )
+                  return false
             }
             return res
       }

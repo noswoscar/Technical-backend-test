@@ -177,9 +177,7 @@ class ParkingApp {
             vehicleId: number,
             fleetId: string
       ): Promise<boolean> => {
-            const fleet = this.fleets.find(
-                  (fleet) => fleet.getFleetIdentity().getId() === fleetId
-            )
+            const fleet = this.getFleet(fleetId)
             if (!fleet) {
                   return false
             }

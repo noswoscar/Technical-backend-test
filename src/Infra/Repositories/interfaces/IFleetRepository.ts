@@ -1,9 +1,11 @@
 import { Fleet } from '../../../Domain/agregates/Fleet'
 export interface IFleetRepository {
       find: (fleet: Fleet) => Promise<{ fleet_id: string } | undefined>
-      verifyVehicleInFleet: (vehicleId: number, fleetId: string) => Promise<any>
-      insert: (fleet: Fleet) => void
-      update: (fleet: Fleet) => void
-      registerVehicle: (vehicleId: number, fleetId: string) => void
-      delete: (fleet: Fleet) => void
+      insert: (fleet: Fleet) => Promise<string | undefined>
+      registerVehicle: (vehicleId: number, fleetId: string) => Promise<boolean>
+      verifyVehicleInFleet: (
+            vehicleId: number,
+            fleetId: string
+      ) => Promise<boolean>
+      findFleets: () => Promise<Array<Fleet> | undefined>
 }

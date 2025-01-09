@@ -38,7 +38,6 @@ const cliApp = async () => {
                               fleetId
                         )
                   if (!result) {
-                        console.log(`CLI: Error registering vehicle`)
                         process.exit(0)
                   }
                   console.log(`CLI: Vehicle registered successfuly`)

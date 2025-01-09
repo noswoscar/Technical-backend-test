@@ -1,6 +1,4 @@
-import { DIContainer } from '../../DIContainer'
 import { LocationRepository } from '../../../Infra/Repositories/LocationRepository'
-import ParkingApp from '../../app'
 import { VehicleRepository } from '../../../Infra/Repositories/VehicleRepository'
 
 export class VerifyVehicleAtLocation {

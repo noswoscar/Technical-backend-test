@@ -2,7 +2,6 @@ import { ErrorLog } from '../services/ErrorLog'
 import { FleetIdentity } from '../valueObjects/FleetIdentity'
 import { ProgramError } from '../entities/ProgramError'
 import { Vehicle } from '../entities/Vehicle'
-import { registerVehicleToFleet } from '../../App/CQRS/commands/RegisterVehicleToFleet'
 
 export class Fleet {
       private fleetIdentity: FleetIdentity

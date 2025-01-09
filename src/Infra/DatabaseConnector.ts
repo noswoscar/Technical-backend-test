@@ -1,4 +1,4 @@
-import pg, { Client, Connection } from 'pg'
+import pg, { Client } from 'pg'
 
 export class DatabaseConnector {
       private client: Client

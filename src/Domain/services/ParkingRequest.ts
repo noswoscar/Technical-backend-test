@@ -1,5 +1,4 @@
 import { LocationRepository } from '../../Infra/Repositories/LocationRepository'
-import { ProgramError } from '../entities/ProgramError'
 import { VehicleRepository } from '../../Infra/Repositories/VehicleRepository'
 
 export class ParkingRequest {

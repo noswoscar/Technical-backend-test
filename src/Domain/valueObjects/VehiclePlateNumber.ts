@@ -30,10 +30,7 @@ export class VehiclePlateNumber {
       }
 
       getRandomNumbers = (count: number) => {
-            let acc = ''
-            for (let i = 0; i < count; i++) {
-                  acc += Math.random() * 10
-            }
+            let acc = Math.floor(Math.random() * (999 - 100 + 1) + 100)
             return acc
       }
 }

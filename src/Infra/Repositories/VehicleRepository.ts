@@ -7,6 +7,26 @@ export class VehicleRepository {
       constructor() {}
       find = () => {}
 
+      findByPlate = async (vehicleNumberPlate: number) => {
+            const dbConnector: DatabaseConnector =
+                  DIContainer.resolve<DatabaseConnector>('dbConnector')
+            const client = dbConnector.getClient()
+            try {
+                  const res: QueryResult<{ id: number }> | undefined =
+                        await client.query(
+                              `SELECT * from vehicles WHERE number_plate = $1;`,
+                              [vehicleNumberPlate]
+                        )
+                  if (!res) return undefined
+                  return res.rows[0].id
+            } catch (err: unknown) {
+                  console.error(
+                        'Error executing query to find a vehicle by its number plate'
+                  )
+                  return undefined
+            }
+      }
+
       getVehicleLocation = async (
             vehicleId: number
       ): Promise<string | undefined> => {

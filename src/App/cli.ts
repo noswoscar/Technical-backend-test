@@ -26,17 +26,23 @@ const cliApp = async () => {
                   console.log(`Fleet created with ID: ${fleetId}`)
                   process.exit(0)
             })
-      // // Register Vehicle Command
+      // Register Vehicle Command
       // program
-      //       .command('register-vehicle <fleetId> <vehiclePlateNumber>')
-      //       .description('Register a vehicle to the fleet')
-      //       .action(async (fleetId, vehiclePlateNumber) => {
-      //             //all vehicles should have a unique number plate
-      //             //get vehicle Id from number plate
-      //             //verifyvehicleInFleet(vehicleId, fleetId)
-      //             //if vehicle in fleet then i should be informed vehicle in fleet
-      //             //if not in fleet, register vehicle to fleet
-      //       })
+      // .command('register-vehicle <fleetId> <vehiclePlateNumber>')
+      // .description('Register a vehicle to the fleet')
+      // .action(async (fleetId, vehiclePlateNumber) => {
+      //       const result =
+      //             await parkingApp.registerVehicleToFleetFromPlateNumber(
+      //                   fleetId,
+      //                   vehiclePlateNumber
+      //             )
+      //       if (result === undefined) {
+      //             console.log(`Error registering vehicle`)
+      //             return
+      //       }
+      //       console.log(`Vehicle registered successfuly`)
+      //       process.exit(0)
+      // })
       program.parse(process.argv)
 }
 

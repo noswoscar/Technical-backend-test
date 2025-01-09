@@ -12,6 +12,7 @@ import { VehicleIdentity } from '../Domain/valueObjects/VehicleIdentity'
 import { VehicleLocation } from '../Domain/entities/VehicleLocation'
 import { VerifyVehicleAtLocation } from './CQRS/queries/VerifyVehicleAtLocation'
 import { VerifyVehicleInFleet } from './CQRS/queries/VerifyVehicleInFleet'
+import { registerVehicleByPlateNumberToFleet } from './CQRS/commands/RegisterVehicleByPlateNumber'
 import { registerVehicleToFleet } from './CQRS/commands/RegisterVehicleToFleet'
 
 class ParkingApp {
@@ -129,9 +130,29 @@ class ParkingApp {
             return res
       }
 
-      parkVehicleAtLocation = (vehicleId: number, locationId: string) => {
+      registerVehicleToFleetFromPlateNumber = async (
+            vehiclePlateNumber: number,
+            fleetId: string
+      ): Promise<boolean> => {
+            const fleet = this.getFleet(fleetId)
+            if (!fleet) {
+                  return false
+            }
+            const registerVehicleToFleetByPlateNumberHandler =
+                  new registerVehicleByPlateNumberToFleet()
+
+            const res =
+                  await registerVehicleToFleetByPlateNumberHandler.execute(
+                        vehiclePlateNumber,
+                        fleet,
+                        this.errorLog
+                  )
+            return res
+      }
+
+      parkVehicleAtLocation = async (vehicleId: number, locationId: string) => {
             const parkVehicleAtLocationHandler = new ParkVehicleAtLocation()
-            return parkVehicleAtLocationHandler.execute(
+            return await parkVehicleAtLocationHandler.execute(
                   vehicleId,
                   locationId,
                   this.errorLog

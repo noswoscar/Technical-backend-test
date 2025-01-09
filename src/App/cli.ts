@@ -18,6 +18,7 @@ const cliApp = async () => {
                   const fleetIdentity = new FleetIdentity(userId)
                   const fleetId: string | undefined =
                         await parkingApp.createFleet(fleetIdentity)
+
                   if (fleetId === undefined) {
                         console.log(`Error creating fleet`)
                         return

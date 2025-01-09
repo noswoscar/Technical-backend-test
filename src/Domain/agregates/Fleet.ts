@@ -37,38 +37,7 @@ export class Fleet {
             return true
       }
 
-      getVehicleIds = () => {
-            return this.vehicleIds
-      }
-
-      setVehicleId = (vehicle: Vehicle) => {
-            this.vehicleIds.push(vehicle.getVehicleIdentity().getVehicleId())
-      }
-
-      // hasVehicle = (vehicle: Vehicle) => {
-      //       if (
-      //             this.vehicles.find(
-      //                   (vehicleItem) =>
-      //                         vehicleItem
-      //                               .getVehicleIdentity()
-      //                               .getVehiclePlateNumber() ===
-      //                         vehicle
-      //                               .getVehicleIdentity()
-      //                               .getVehiclePlateNumber()
-      //             )
-      //       ) {
-      //             return true
-      //       }
-      //       return false
-      // }
-
-      getIdentity = () => {
+      getFleetIdentity = () => {
             return this.fleetIdentity
-      }
-
-      getVehiclesPlateNumbers = () => {
-            //for each vehicleId (SELECT each vehicle seperately)
-            //get corresponding numberplate and save to numberplate array
-            //return numberplate array
       }
 }

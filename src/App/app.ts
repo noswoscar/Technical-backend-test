@@ -17,14 +17,14 @@ import { registerVehicleToFleet } from './CQRS/commands/RegisterVehicleToFleet'
 class ParkingApp {
       private vehicleIds: Array<number>
       private fleets: Array<Fleet>
-      private locations: Array<VehicleLocation>
+      private locationIds: Array<string>
       private errorLog: ErrorLog
 
       constructor() {
             console.log('Welcome to my parking app')
             this.vehicleIds = []
             this.fleets = []
-            this.locations = []
+            this.locationIds = []
             this.errorLog = new ErrorLog()
             DIContainer.register('app', this)
       }
@@ -82,13 +82,9 @@ class ParkingApp {
             return undefined
       }
 
-      getFleets = (): Array<Fleet> => {
-            return this.fleets
-      }
-
-      getFleet = (fleetId: string): Fleet | undefined => {
+      private getFleet = (fleetId: string): Fleet | undefined => {
             return this.fleets.find(
-                  (appFleet) => appFleet.getIdentity().getId() === fleetId
+                  (appFleet) => appFleet.getFleetIdentity().getId() === fleetId
             )
       }
 
@@ -147,7 +143,7 @@ class ParkingApp {
             fleetId: string
       ): Promise<boolean> => {
             const fleet = this.fleets.find(
-                  (fleet) => fleet.getIdentity().getId() === fleetId
+                  (fleet) => fleet.getFleetIdentity().getId() === fleetId
             )
             if (!fleet) {
                   return false
@@ -169,17 +165,20 @@ class ParkingApp {
       }
 
       //location methods
-      createLocation = (
+      createLocation = async (
             latitude: string,
             longitude: string,
             altitude: string | 0
       ): Promise<string | undefined> => {
             const createLocationHandler = new CreateLocation()
-            return createLocationHandler.execute(latitude, longitude, altitude)
-      }
-
-      getLocations = () => {
-            return this.locations
+            const newLocationId = await createLocationHandler.execute(
+                  latitude,
+                  longitude,
+                  altitude
+            )
+            if (!newLocationId) return undefined
+            this.locationIds.push(newLocationId)
+            return newLocationId
       }
 
       //errorlog methods

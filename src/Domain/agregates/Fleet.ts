@@ -12,13 +12,12 @@ export class Fleet {
             this.vehicleIds = vehicleIds
       }
 
-      verifyVehicleInFleet = (vehicleId: number) => {
-            return this.vehicleIds.includes(vehicleId)
-      }
-
       verifyAlreadyRegistered = (newVehicleId: number): boolean => {
-            const alreadyRegistered = this.vehicleIds.includes(newVehicleId)
-            return alreadyRegistered
+            const alreadyRegistered = this.vehicleIds.find((id) => {
+                  return id === newVehicleId
+            })
+            if (alreadyRegistered) return true
+            return false
       }
 
       registerVehicle = (vehicleId: number, errorLog: ErrorLog): boolean => {

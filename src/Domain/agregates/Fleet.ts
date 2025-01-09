@@ -1,7 +1,7 @@
 import { ErrorLog } from '../services/ErrorLog'
 import { FleetIdentity } from '../valueObjects/FleetIdentity'
 import { ProgramError } from '../entities/ProgramError'
-import { Vehicle } from '../entities/Vehicle'
+import { VerifyVehicleInFleet } from '../../App/CQRS/queries/VerifyVehicleInFleet'
 
 export class Fleet {
       private fleetIdentity: FleetIdentity
@@ -12,18 +12,15 @@ export class Fleet {
             this.vehicleIds = vehicleIds
       }
 
-      verifyAlreadyRegistered = (newVehicleId: number): boolean => {
-            const alreadyRegistered = this.vehicleIds.find((id) => {
-                  return id === newVehicleId
-            })
-            if (alreadyRegistered) return true
-            return false
+      private isVehicleRegistered = (newVehicleId: number): boolean => {
+            const vehicleRegistered = this.vehicleIds.includes(newVehicleId)
+            return vehicleRegistered
       }
 
       registerVehicle = (vehicleId: number, errorLog: ErrorLog): boolean => {
-            const alreadyRegistered = this.verifyAlreadyRegistered(vehicleId)
+            const vehicleRegistered = this.isVehicleRegistered(vehicleId)
 
-            if (alreadyRegistered) {
+            if (vehicleRegistered) {
                   const registryError = new ProgramError(
                         'RegistryError',
                         'The vehicle was already registered'
@@ -34,6 +31,10 @@ export class Fleet {
             }
             this.vehicleIds.push(vehicleId)
             return true
+      }
+
+      verifyVehicleInFleet = (vehicleId: number) => {
+            return this.isVehicleRegistered(vehicleId)
       }
 
       getFleetIdentity = () => {

@@ -23,42 +23,30 @@ export class ErrorLog {
       }
 
       hasRecentRegistryError = (time: number) => {
-            if (
-                  this.errors.find((errorItem: ProgramError) => {
-                        if (
-                              errorItem.getErrorType() === 'RegistryError' &&
-                              this.checkTimeDiff(
-                                    errorItem.getErrorTime(),
-                                    time
-                              ) < 50
-                        ) {
-                              return true
-                        }
-                        return false
-                  })
-            ) {
-                  return true
-            }
+            const found = this.errors.find((errorItem: ProgramError) => {
+                  if (
+                        errorItem.getErrorType() === 'RegistryError' &&
+                        this.checkTimeDiff(errorItem.getErrorTime(), time) < 50
+                  ) {
+                        return true
+                  }
+                  return false
+            })
+            if (found) return true
             return false
       }
 
       hasRecentParkingError = (time: number): boolean => {
-            if (
-                  this.errors.find((errorItem: ProgramError) => {
-                        if (
-                              errorItem.getErrorType() === 'ParkingError' &&
-                              this.checkTimeDiff(
-                                    errorItem.getErrorTime(),
-                                    time
-                              ) < 50
-                        ) {
-                              return true
-                        }
-                        return false
-                  })
-            ) {
-                  return true
-            }
+            const found = this.errors.find((errorItem: ProgramError) => {
+                  if (
+                        errorItem.getErrorType() === 'ParkingError' &&
+                        this.checkTimeDiff(errorItem.getErrorTime(), time) < 50
+                  ) {
+                        return true
+                  }
+                  return false
+            })
+            if (found) return true
             return false
       }
 

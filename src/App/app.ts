@@ -7,9 +7,9 @@ import { ErrorLog } from '../Domain/services/ErrorLog'
 import { Fleet } from '../Domain/agregates/Fleet'
 import { FleetIdentity } from '../Domain/valueObjects/FleetIdentity'
 import { ParkVehicleAtLocation } from './CQRS/commands/ParkVehicleAtLocation'
+import { SyncAppCmd } from './CQRS/commands/SyncAppCmd'
 import { Vehicle } from '../Domain/entities/Vehicle'
 import { VehicleIdentity } from '../Domain/valueObjects/VehicleIdentity'
-import { VehicleLocation } from '../Domain/entities/VehicleLocation'
 import { VerifyVehicleAtLocation } from './CQRS/queries/VerifyVehicleAtLocation'
 import { VerifyVehicleInFleet } from './CQRS/queries/VerifyVehicleInFleet'
 import { registerVehicleByPlateNumberToFleet } from './CQRS/commands/RegisterVehicleByPlateNumber'
@@ -18,14 +18,12 @@ import { registerVehicleToFleet } from './CQRS/commands/RegisterVehicleToFleet'
 class ParkingApp {
       private vehicleIds: Array<number>
       private fleets: Array<Fleet>
-      private locationIds: Array<string>
       private errorLog: ErrorLog
 
       constructor() {
             console.log('Welcome to my parking app')
             this.vehicleIds = []
             this.fleets = []
-            this.locationIds = []
             this.errorLog = new ErrorLog()
             DIContainer.register('app', this)
       }
@@ -36,6 +34,19 @@ class ParkingApp {
             DIContainer.register('dbConnector', connector)
             let promise = await connector.connect()
             return promise
+      }
+
+      syncAppState = async () => {
+            const syncAppState = new SyncAppCmd()
+            const fleets: Array<Fleet> | undefined =
+                  await syncAppState.execute()
+            if (!fleets) {
+                  console.error(
+                        'Error when syncing the exiting fleets between DB and application'
+                  )
+            }
+            if (fleets) this.fleets = fleets
+            return fleets
       }
 
       close = async () => {
@@ -136,17 +147,26 @@ class ParkingApp {
       ): Promise<boolean> => {
             const fleet = this.getFleet(fleetId)
             if (!fleet) {
+                  console.error('Unable to find fleet with id : ', fleetId)
                   return false
             }
             const registerVehicleToFleetByPlateNumberHandler =
                   new registerVehicleByPlateNumberToFleet()
 
-            const res =
+            const res: boolean =
                   await registerVehicleToFleetByPlateNumberHandler.execute(
                         vehiclePlateNumber,
                         fleet,
                         this.errorLog
                   )
+            if (!res) {
+                  console.error(
+                        'Unable to register',
+                        vehiclePlateNumber,
+                        ' to fleet',
+                        fleet.getFleetIdentity().getId()
+                  )
+            }
             return res
       }
 
@@ -198,7 +218,6 @@ class ParkingApp {
                   altitude
             )
             if (!newLocationId) return undefined
-            this.locationIds.push(newLocationId)
             return newLocationId
       }
 

@@ -1,6 +1,7 @@
 import { DIContainer } from '../../App/DIContainer'
 import { DatabaseConnector } from '../DatabaseConnector'
 import { Fleet } from '../../Domain/agregates/Fleet'
+import { FleetIdentity } from '../../Domain/valueObjects/FleetIdentity'
 import { IFleetRepository } from './interfaces/IFleetRepository'
 import { QueryResult } from 'pg'
 
@@ -21,6 +22,42 @@ export class FleetRepository implements IFleetRepository {
                         return undefined
                   }
                   return res.rows[0].fleet_id
+            } catch (err: unknown) {
+                  console.error('Error executing query to find a fleet')
+            }
+      }
+
+      findFleets = async (): Promise<Array<Fleet> | undefined> => {
+            const dbConnector: DatabaseConnector =
+                  DIContainer.resolve<DatabaseConnector>('dbConnector')
+            const client = dbConnector.getClient()
+            try {
+                  const res:
+                        | QueryResult<{
+                                fleet_name: string
+                                fleet_id: string
+                                vehicles: Array<number>
+                          }>
+                        | undefined = await client.query('select * from fleets')
+                  if (res === undefined) {
+                        return undefined
+                  }
+                  let rows: Array<{
+                        fleet_name: string
+                        fleet_id: string
+                        vehicles: Array<number>
+                  }> = res.rows
+                  let fleets: Array<Fleet> = []
+                  for (let i = 0; i < rows.length; i++) {
+                        const fleetIdentity = new FleetIdentity(
+                              rows[i].fleet_name,
+                              rows[i].fleet_id
+                        )
+                        const vehicles = rows[i].vehicles
+                        const newFleet = new Fleet(fleetIdentity, vehicles)
+                        fleets.push(newFleet)
+                  }
+                  return fleets
             } catch (err: unknown) {
                   console.error('Error executing query to find a fleet')
             }

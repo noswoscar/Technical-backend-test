@@ -36,7 +36,7 @@ export class FleetRepository implements IFleetRepository {
                         | QueryResult<{
                                 fleet_name: string
                                 fleet_id: string
-                                vehicles: Array<number>
+                                vehicles: Array<string>
                           }>
                         | undefined = await client.query('select * from fleets')
                   if (res === undefined) {
@@ -45,7 +45,7 @@ export class FleetRepository implements IFleetRepository {
                   let rows: Array<{
                         fleet_name: string
                         fleet_id: string
-                        vehicles: Array<number>
+                        vehicles: Array<string>
                   }> = res.rows
                   let fleets: Array<Fleet> = []
                   for (let i = 0; i < rows.length; i++) {
@@ -53,7 +53,9 @@ export class FleetRepository implements IFleetRepository {
                               rows[i].fleet_name,
                               rows[i].fleet_id
                         )
-                        const vehicles = rows[i].vehicles
+                        const vehicles = rows[i].vehicles.map((vehicle) =>
+                              parseInt(vehicle)
+                        )
                         const newFleet = new Fleet(fleetIdentity, vehicles)
                         fleets.push(newFleet)
                   }
@@ -115,8 +117,8 @@ export class FleetRepository implements IFleetRepository {
             const client = dbConnector.getClient()
             try {
                   const res = await client.query(
-                        `UPDATE fleets SET vehicles = $1 WHERE fleet_id = $2;`,
-                        [[vehicleId.toString()], fleetId]
+                        `UPDATE fleets SET vehicles = array_append(vehicles, $1) WHERE fleet_id = $2;`,
+                        [vehicleId, fleetId]
                   )
                   return true
             } catch (err: unknown) {

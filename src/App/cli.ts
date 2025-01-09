@@ -39,14 +39,13 @@ const cliApp = async () => {
                         )
                   if (!result) {
                         console.log(`CLI: Error registering vehicle`)
-                        return
+                        process.exit(0)
                   }
                   console.log(`CLI: Vehicle registered successfuly`)
                   process.exit(0)
             })
       program.parse(process.argv)
 }
-
 cliApp()
 
 // // Localize Vehicle Command

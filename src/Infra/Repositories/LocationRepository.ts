@@ -1,8 +1,8 @@
+import { QueryResult } from 'pg'
 import { DIContainer } from '../../App/DIContainer'
+import { VehicleLocation } from '../../Domain/entities/VehicleLocation'
 import { DatabaseConnector } from '../DatabaseConnector'
 import { ILocationRepository } from './interfaces/ILocationRepository'
-import { QueryResult } from 'pg'
-import { VehicleLocation } from '../../Domain/entities/VehicleLocation'
 
 export class LocationRepository implements ILocationRepository {
       constructor() {}

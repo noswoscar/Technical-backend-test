@@ -1,7 +1,7 @@
-import { ErrorLog } from '../../../Domain/services/ErrorLog'
-import { LocationRepository } from '../../../Infra/Repositories/LocationRepository'
-import { ParkingRequest } from '../../../Domain/services/ParkingRequest'
 import { ProgramError } from '../../../Domain/entities/ProgramError'
+import { ErrorLog } from '../../../Domain/services/ErrorLog'
+import { ParkingRequest } from '../../../Domain/services/ParkingRequest'
+import { LocationRepository } from '../../../Infra/Repositories/LocationRepository'
 import { VehicleRepository } from '../../../Infra/Repositories/VehicleRepository'
 
 export class ParkVehicleAtLocation {

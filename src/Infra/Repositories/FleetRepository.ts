@@ -1,9 +1,9 @@
+import { QueryResult } from 'pg'
 import { DIContainer } from '../../App/DIContainer'
-import { DatabaseConnector } from '../DatabaseConnector'
 import { Fleet } from '../../Domain/agregates/Fleet'
 import { FleetIdentity } from '../../Domain/valueObjects/FleetIdentity'
+import { DatabaseConnector } from '../DatabaseConnector'
 import { IFleetRepository } from './interfaces/IFleetRepository'
-import { QueryResult } from 'pg'
 
 export class FleetRepository implements IFleetRepository {
       constructor() {}

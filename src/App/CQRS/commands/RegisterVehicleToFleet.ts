@@ -1,5 +1,5 @@
-import { ErrorLog } from '../../../Domain/services/ErrorLog'
 import { Fleet } from '../../../Domain/agregates/Fleet'
+import { ErrorLog } from '../../../Domain/services/ErrorLog'
 import { FleetRepository } from '../../../Infra/Repositories/FleetRepository'
 
 export class registerVehicleToFleet {

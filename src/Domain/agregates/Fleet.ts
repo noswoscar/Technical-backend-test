@@ -1,7 +1,6 @@
+import { ProgramError } from '../entities/ProgramError'
 import { ErrorLog } from '../services/ErrorLog'
 import { FleetIdentity } from '../valueObjects/FleetIdentity'
-import { ProgramError } from '../entities/ProgramError'
-import { VerifyVehicleInFleet } from '../../App/CQRS/queries/VerifyVehicleInFleet'
 
 export class Fleet {
       private fleetIdentity: FleetIdentity

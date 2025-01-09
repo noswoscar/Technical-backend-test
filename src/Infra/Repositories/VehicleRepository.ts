@@ -1,8 +1,8 @@
+import { QueryResult } from 'pg'
 import { DIContainer } from '../../App/DIContainer'
+import { Vehicle } from '../../Domain/entities/Vehicle'
 import { DatabaseConnector } from '../DatabaseConnector'
 import { IVehicleRepository } from './interfaces/IVehicleRepository'
-import { QueryResult } from 'pg'
-import { Vehicle } from '../../Domain/entities/Vehicle'
 
 export class VehicleRepository implements IVehicleRepository {
       constructor() {}

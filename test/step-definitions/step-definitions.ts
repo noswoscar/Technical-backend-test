@@ -35,7 +35,7 @@ class CustomWorld {
             try {
                   await this.sharedData.app.init()
             } catch (err: unknown) {
-                  console.log(
+                  console.error(
                         'An error occured when connecting to the database'
                   )
             }
@@ -48,7 +48,7 @@ Before(async function (this: CustomWorld) {
       try {
             await this.initialize() // Ensure the app is initialized before each scenario
       } catch (err: unknown) {
-            console.log(err)
+            console.error(err)
       }
 })
 
@@ -269,6 +269,6 @@ After(async function (this: CustomWorld) {
       try {
             await this.sharedData.app.close()
       } catch (err: unknown) {
-            console.log('An error occured when closing the database')
+            console.error('An error occured when closing the database')
       }
 })

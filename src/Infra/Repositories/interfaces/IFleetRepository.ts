@@ -5,5 +5,5 @@ export interface IFleetRepository {
       insert: (fleet: Fleet) => void
       update: (fleet: Fleet) => void
       registerVehicle: (vehicleId: number, fleetId: string) => void
-      delete: () => void
+      delete: (fleet: Fleet) => void
 }

@@ -2,6 +2,7 @@ import pg, { Client } from 'pg'
 
 export class DatabaseConnector {
       private client: Client
+
       constructor() {
             this.client = new pg.Client({
                   user: 'oscar',
@@ -12,15 +13,15 @@ export class DatabaseConnector {
             })
       }
 
-      connect = async (): Promise<void> => {
+      public connect = async (): Promise<void> => {
             await this.client.connect()
       }
 
-      disconnect = async (): Promise<void> => {
+      public disconnect = async (): Promise<void> => {
             await this.client.end()
       }
 
-      getClient = () => {
+      public getClient = () => {
             return this.client
       }
 }

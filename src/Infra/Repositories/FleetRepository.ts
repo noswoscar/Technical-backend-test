@@ -94,5 +94,5 @@ export class FleetRepository implements IFleetRepository {
             }
       }
 
-      delete = () => {}
+      delete = (fleet: Fleet) => {}
 }

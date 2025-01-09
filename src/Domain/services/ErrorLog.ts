@@ -12,7 +12,7 @@ export class ErrorLog {
             this.errors.push(error)
       }
       logError = (error: ProgramError) => {
-            console.error(error.errorMessage)
+            console.error(error.getErrorMessage())
       }
       getLastError = () => {
             return this.errors[this.errors.length - 1]
@@ -21,8 +21,8 @@ export class ErrorLog {
             if (
                   this.errors.find((errorItem: ProgramError) => {
                         if (
-                              errorItem.errorType === 'RegistryError' &&
-                              diff(errorItem.errorTime, time) < 50
+                              errorItem.getErrorType() === 'RegistryError' &&
+                              diff(errorItem.getErrorTime(), time) < 50
                         ) {
                               return true
                         }
@@ -37,8 +37,8 @@ export class ErrorLog {
             if (
                   this.errors.find((errorItem: ProgramError) => {
                         if (
-                              errorItem.errorType === 'ParkingError' &&
-                              diff(errorItem.errorTime, time) < 50
+                              errorItem.getErrorType() === 'ParkingError' &&
+                              diff(errorItem.getErrorTime(), time) < 50
                         ) {
                               return true
                         }

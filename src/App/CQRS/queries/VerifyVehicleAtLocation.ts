@@ -7,12 +7,15 @@ export class VerifyVehicleAtLocation {
             const vehicleLocation = await vehicleRepository.getVehicleLocation(
                   vehicleId
             )
+
             if (!vehicleLocation) {
                   return false
             }
+
             const locationRepository = new LocationRepository()
             const vehicleAtLocation =
                   await locationRepository.getVehicleAtLocation(vehicleLocation)
+
             if (vehicleId.toString() === vehicleAtLocation) {
                   return true
             }

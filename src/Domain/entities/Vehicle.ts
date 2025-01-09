@@ -9,15 +9,15 @@ export class Vehicle {
             this.locationId = locationId
       }
 
-      setLocationId = (locationId: string) => {
-            this.locationId = locationId
-      }
-
       getLocationId = () => {
             return this.locationId
       }
 
       getVehicleIdentity = () => {
             return this.vehicleIdentity
+      }
+
+      setLocationId = (locationId: string) => {
+            this.locationId = locationId
       }
 }

@@ -7,6 +7,7 @@ import ParkingApp from './app'
 const cliApp = async () => {
       const parkingApp = new ParkingApp()
       await parkingApp.init()
+      await parkingApp.syncAppState()
 
       const program = new Command()
 
@@ -20,29 +21,29 @@ const cliApp = async () => {
                         await parkingApp.createFleet(fleetIdentity)
 
                   if (fleetId === undefined) {
-                        console.log(`Error creating fleet`)
+                        console.log(`CLI: Error creating fleet`)
                         return
                   }
-                  console.log(`Fleet created with ID: ${fleetId}`)
+                  console.log(`CLI: Fleet created with ID: ${fleetId}`)
                   process.exit(0)
             })
       // Register Vehicle Command
-      // program
-      // .command('register-vehicle <fleetId> <vehiclePlateNumber>')
-      // .description('Register a vehicle to the fleet')
-      // .action(async (fleetId, vehiclePlateNumber) => {
-      //       const result =
-      //             await parkingApp.registerVehicleToFleetFromPlateNumber(
-      //                   fleetId,
-      //                   vehiclePlateNumber
-      //             )
-      //       if (result === undefined) {
-      //             console.log(`Error registering vehicle`)
-      //             return
-      //       }
-      //       console.log(`Vehicle registered successfuly`)
-      //       process.exit(0)
-      // })
+      program
+            .command('register-vehicle <fleetId> <vehiclePlateNumber>')
+            .description('Register a vehicle to the fleet')
+            .action(async (fleetId, vehiclePlateNumber) => {
+                  const result =
+                        await parkingApp.registerVehicleToFleetFromPlateNumber(
+                              vehiclePlateNumber,
+                              fleetId
+                        )
+                  if (!result) {
+                        console.log(`CLI: Error registering vehicle`)
+                        return
+                  }
+                  console.log(`CLI: Vehicle registered successfuly`)
+                  process.exit(0)
+            })
       program.parse(process.argv)
 }
 

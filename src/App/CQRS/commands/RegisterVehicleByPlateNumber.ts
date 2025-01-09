@@ -15,7 +15,9 @@ export class registerVehicleByPlateNumberToFleet {
             const vehicleId = await vehicleRepositiory.findByPlate(
                   vehiclePlateNumber
             )
-            if (!vehicleId) return false
+            if (!vehicleId) {
+                  return false
+            }
             const result = await fleet.registerVehicle(vehicleId, errorLog)
             if (result) {
                   const registryResult = await fleetRepositiory.registerVehicle(

@@ -1,19 +1,20 @@
-import { Fleet } from '../Domain/agregates/Fleet'
-import { Vehicle } from '../Domain/entities/Vehicle'
-import { ErrorLog } from '../Domain/services/ErrorLog'
-import { FleetIdentity } from '../Domain/valueObjects/FleetIdentity'
-import { VehicleIdentity } from '../Domain/valueObjects/VehicleIdentity'
-import { DatabaseConnector } from '../Infra/DatabaseConnector'
 import { CreateFleet } from './CQRS/commands/CreateFleet'
 import { CreateLocation } from './CQRS/commands/CreateLocation'
 import { CreateVehicle } from './CQRS/commands/CreateVehicle'
+import { DIContainer } from './DIContainer'
+import { DatabaseConnector } from '../Infra/DatabaseConnector'
+import { ErrorLog } from '../Domain/services/ErrorLog'
+import { Fleet } from '../Domain/agregates/Fleet'
+import { FleetIdentity } from '../Domain/valueObjects/FleetIdentity'
+import { LocalizeVehicle } from './CQRS/commands/LocalizeVehicle'
 import { ParkVehicleAtLocation } from './CQRS/commands/ParkVehicleAtLocation'
-import { registerVehicleByPlateNumberToFleet } from './CQRS/commands/RegisterVehicleByPlateNumber'
-import { registerVehicleToFleet } from './CQRS/commands/RegisterVehicleToFleet'
 import { SyncAppCmd } from './CQRS/commands/SyncAppCmd'
+import { Vehicle } from '../Domain/entities/Vehicle'
+import { VehicleIdentity } from '../Domain/valueObjects/VehicleIdentity'
 import { VerifyVehicleAtLocation } from './CQRS/queries/VerifyVehicleAtLocation'
 import { VerifyVehicleInFleet } from './CQRS/queries/VerifyVehicleInFleet'
-import { DIContainer } from './DIContainer'
+import { registerVehicleByPlateNumberToFleet } from './CQRS/commands/RegisterVehicleByPlateNumber'
+import { registerVehicleToFleet } from './CQRS/commands/RegisterVehicleToFleet'
 
 class ParkingApp {
       private vehicleIds: Array<number>
@@ -211,6 +212,28 @@ class ParkingApp {
             )
             if (!newLocationId) return undefined
             return newLocationId
+      }
+
+      localizeVehicle = async (
+            fleetId: string,
+            vehiclePlateNumber: number,
+            latitude: string,
+            longitude: string,
+            altitude: string
+      ) => {
+            const localizeVehicleHandler = new LocalizeVehicle()
+            const fleet = this.getFleet(fleetId)
+
+            if (!fleet) {
+                  return false
+            }
+            return localizeVehicleHandler.execute(
+                  fleet,
+                  vehiclePlateNumber,
+                  latitude,
+                  longitude,
+                  altitude
+            )
       }
 
       //errorlog methods

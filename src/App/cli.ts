@@ -43,44 +43,35 @@ const cliApp = async () => {
                   console.log(`CLI: Vehicle registered successfuly`)
                   process.exit(0)
             })
+      // Localize Vehicle Command
+      program
+            .command(
+                  'localize-vehicle <fleetId> <vehiclePlateNumber> <lat> <lng> [alt]'
+            )
+            .description('Localize a vehicle within a fleet')
+            .action(
+                  async (
+                        fleetId,
+                        vehiclePlateNumber,
+                        latitude,
+                        longitude,
+                        altitude = 0
+                  ) => {
+                        const result = await parkingApp.localizeVehicle(
+                              fleetId,
+                              vehiclePlateNumber,
+                              latitude,
+                              longitude,
+                              altitude
+                        )
+                        if (!result) {
+                              process.exit(0)
+                        }
+                        console.log(`CLI: Vehicle localized successfuly`)
+                        process.exit(0)
+                  }
+            )
       program.parse(process.argv)
 }
-cliApp()
 
-// // Localize Vehicle Command
-// program
-//       .command(
-//             'localize-vehicle <fleetId> <vehiclePlateNumber> <lat> <lng> [alt]'
-//       )
-//       .description('Localize a vehicle within a fleet')
-//       .action((fleetId, vehiclePlateNumber, latitude, longitude, altitude) => {
-//             const fleet = parkingApp.getFleet(fleetId)
-//             if (fleet) {
-//                   const vehicle = fleet
-//                         .getVehicles()
-//                         .find(
-//                               (vehicle) =>
-//                                     vehicle.getVehicleNumberPlate() ===
-//                                     vehiclePlateNumber
-//                         )
-//                   if (vehicle) {
-//                         const location = new VehicleLocation(
-//                               latitude,
-//                               longitude,
-//                               altitude || 0
-//                         )
-//                         vehicle.setLocation(location)
-//                         console.log(
-//                               `Vehicle ${vehiclePlateNumber} localized at (${latitude}, ${longitude}, ${
-//                                     altitude || 0
-//                               })`
-//                         )
-//                   } else {
-//                         console.error(
-//                               `Vehicle with plate number ${vehiclePlateNumber} not found in fleet ${fleetId}`
-//                         )
-//                   }
-//             } else {
-//                   console.error(`Fleet with ID ${fleetId} not found.`)
-//             }
-//       })
+cliApp()

@@ -1,6 +1,7 @@
 import { QueryResult } from 'pg'
 import { DIContainer } from '../../App/DIContainer'
 import { VehicleLocation } from '../../Domain/entities/VehicleLocation'
+import { Coordinates } from '../../Domain/valueObjects/Coordinates'
 import { DatabaseConnector } from '../DatabaseConnector'
 import { ILocationRepository } from './interfaces/ILocationRepository'
 
@@ -89,9 +90,36 @@ export class LocationRepository implements ILocationRepository {
                   return res.rows[0].vehicle
             } catch (err: unknown) {
                   console.error(
-                        'Error executing query to update a Location with a vehicle'
+                        'Error executing query to get a vehicle at location'
                   )
                   return undefined
+            }
+      }
+      updateLocation = async (
+            locationId: string,
+            coordinates: Coordinates
+      ): Promise<boolean> => {
+            const dbConnector: DatabaseConnector =
+                  DIContainer.resolve<DatabaseConnector>('dbConnector')
+            const client = dbConnector.getClient()
+
+            try {
+                  const res: QueryResult | undefined = await client.query(
+                        `UPDATE locations SET latitude = $1, longitude = $2, altitude = $3 where id = $4;`,
+                        [
+                              coordinates.latitude,
+                              coordinates.longitude,
+                              coordinates.altitude,
+                              locationId,
+                        ]
+                  )
+                  if (res === undefined) return false
+                  return true
+            } catch (err: unknown) {
+                  console.error(
+                        'Error executing query to update the Location for a vehicle'
+                  )
+                  return false
             }
       }
 }

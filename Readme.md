@@ -7,7 +7,7 @@
 - It also uses **[Javascript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)** and **[CucumberJs](https://cucumber.io)**
 - The database is a **[Postgresql](https://www.postgresql.org/)** database and can be accessed by providing localhost address and port in the **_DatabaseConnector_** class
 
-- Adjacent to this app is a **Command Line Interface** that can be activated by building the project from the root directory with **npm run build** and then using the **npm link** command. The fleet command should then be available.
+- Adjacent to this app is a **Command Line Interface** that can be activated by building the project from the root directory with **npm run build** and then using the **npm link** command. The fleet command line should then be available.
 - It has 3 commands which use the following syntax:
      - fleet create `<userId>` # returns fleetId on the standard output
      - fleet register-vehicle `<fleetId>` `<vehiclePlateNumber>`

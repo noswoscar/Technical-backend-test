@@ -97,6 +97,7 @@ export class LocationRepository implements ILocationRepository {
       }
       updateLocation = async (
             locationId: string,
+            vehicleId: number,
             coordinates: Coordinates
       ): Promise<boolean> => {
             const dbConnector: DatabaseConnector =
@@ -105,11 +106,12 @@ export class LocationRepository implements ILocationRepository {
 
             try {
                   const res: QueryResult | undefined = await client.query(
-                        `UPDATE locations SET latitude = $1, longitude = $2, altitude = $3 where id = $4;`,
+                        `UPDATE locations SET latitude = $1, longitude = $2, altitude = $3, vehicle = $4 where id = $5;`,
                         [
                               coordinates.latitude,
                               coordinates.longitude,
                               coordinates.altitude,
+                              vehicleId,
                               locationId,
                         ]
                   )

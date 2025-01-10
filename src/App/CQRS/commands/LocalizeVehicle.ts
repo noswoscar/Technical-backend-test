@@ -26,6 +26,7 @@ export class LocalizeVehicle {
             }
             const res: boolean = await locationRepository.updateLocation(
                   locationId,
+                  vehicleId,
                   coordinates
             )
             if (!res) return false

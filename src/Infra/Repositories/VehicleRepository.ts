@@ -64,7 +64,9 @@ export class VehicleRepository implements IVehicleRepository {
                   )
                   return true
             } catch (err: unknown) {
-                  console.error('Error executing query to insert a new Vehicle')
+                  console.error(
+                        'Error executing query to update a Vehicle with a new location Id'
+                  )
                   return false
             }
       }
@@ -84,7 +86,7 @@ export class VehicleRepository implements IVehicleRepository {
                   return res.rows[0].location
             } catch (err: unknown) {
                   console.error(
-                        'Error executing query to update a Location with a vehicle'
+                        'Error executing query to get a location id for a said vehicle'
                   )
                   return undefined
             }

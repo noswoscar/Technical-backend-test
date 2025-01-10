@@ -69,7 +69,7 @@ export class LocationRepository implements ILocationRepository {
                   return false
             } catch (err: unknown) {
                   console.error(
-                        'Error executing query to update a Location with a vehicle'
+                        'Error executing query to verify a location has a said vehicle'
                   )
                   return false
             }

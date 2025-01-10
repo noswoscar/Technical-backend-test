@@ -124,7 +124,9 @@ export class FleetRepository implements IFleetRepository {
                   }
                   return fleets
             } catch (err: unknown) {
-                  console.error('Error executing query to find a fleet')
+                  console.error(
+                        'Error executing query to find fleets in the DB'
+                  )
             }
       }
 }

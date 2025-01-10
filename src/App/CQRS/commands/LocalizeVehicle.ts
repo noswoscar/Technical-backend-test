@@ -15,20 +15,35 @@ export class LocalizeVehicle {
             const vehicleId = await vehicleRepository.findByPlate(
                   vehiclePlateNumber
             )
+
             if (!vehicleId) return false
+
             const locationId: string | undefined =
                   await vehicleRepository.getVehicleLocation(vehicleId)
+
             if (!locationId) return false
+
             const coordinates = {
                   latitude: latitude,
                   longitude: longitude,
                   altitude: altitude,
             }
-            const res: boolean = await locationRepository.updateLocation(
-                  locationId,
-                  vehicleId,
-                  coordinates
-            )
+            let res: boolean
+
+            if (altitude === '-1') {
+                  res = await locationRepository.updateLocation(
+                        locationId,
+                        vehicleId,
+                        coordinates
+                  )
+            } else {
+                  res = await locationRepository.updateLocationAndAltitude(
+                        locationId,
+                        vehicleId,
+                        coordinates
+                  )
+            }
+
             if (!res) return false
             return true
       }

@@ -95,7 +95,37 @@ export class LocationRepository implements ILocationRepository {
                   return undefined
             }
       }
+
       updateLocation = async (
+            locationId: string,
+            vehicleId: number,
+            coordinates: Coordinates
+      ): Promise<boolean> => {
+            const dbConnector: DatabaseConnector =
+                  DIContainer.resolve<DatabaseConnector>('dbConnector')
+            const client = dbConnector.getClient()
+
+            try {
+                  const res: QueryResult | undefined = await client.query(
+                        `UPDATE locations SET latitude = $1, longitude = $2, vehicle = $3 where id = $4;`,
+                        [
+                              coordinates.latitude,
+                              coordinates.longitude,
+                              vehicleId,
+                              locationId,
+                        ]
+                  )
+                  if (res === undefined) return false
+                  return true
+            } catch (err: unknown) {
+                  console.error(
+                        'Error executing query to update the Location for a vehicle'
+                  )
+                  return false
+            }
+      }
+
+      updateLocationAndAltitude = async (
             locationId: string,
             vehicleId: number,
             coordinates: Coordinates
@@ -119,7 +149,7 @@ export class LocationRepository implements ILocationRepository {
                   return true
             } catch (err: unknown) {
                   console.error(
-                        'Error executing query to update the Location for a vehicle'
+                        'Error executing query to update the Location and Altitude for a vehicle'
                   )
                   return false
             }

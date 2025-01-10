@@ -65,6 +65,9 @@ const cliApp = async () => {
                               altitude
                         )
                         if (!result) {
+                              console.log(
+                                    `CLI: Vehicle could not be localized, make sure you specify correct <fleetId> <vehiclePlateNumber> <lat> <lng> [alt]`
+                              )
                               process.exit(0)
                         }
                         console.log(`CLI: Vehicle localized successfuly`)

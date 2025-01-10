@@ -21,7 +21,7 @@ const cliApp = async () => {
                         await parkingApp.createFleet(fleetIdentity)
 
                   if (fleetId === undefined) {
-                        console.log(`CLI: Error creating fleet`)
+                        console.error(`CLI: Error creating fleet`)
                         return
                   }
                   console.log(`CLI: Fleet created with ID: ${fleetId}`)
@@ -38,6 +38,9 @@ const cliApp = async () => {
                               fleetId
                         )
                   if (!result) {
+                        console.error(
+                              `CLI: Error registering vehicle to a fleet`
+                        )
                         process.exit(0)
                   }
                   console.log(`CLI: Vehicle registered successfuly`)
@@ -55,7 +58,7 @@ const cliApp = async () => {
                         vehiclePlateNumber,
                         latitude,
                         longitude,
-                        altitude = 0
+                        altitude = '-1'
                   ) => {
                         const result = await parkingApp.localizeVehicle(
                               fleetId,
@@ -65,12 +68,12 @@ const cliApp = async () => {
                               altitude
                         )
                         if (!result) {
-                              console.log(
+                              console.error(
                                     `CLI: Vehicle could not be localized, make sure you specify correct <fleetId> <vehiclePlateNumber> <lat> <lng> [alt]`
                               )
                               process.exit(0)
                         }
-                        console.log(`CLI: Vehicle localized successfuly`)
+                        console.log(`CLI: Vehicle localized successfully`)
                         process.exit(0)
                   }
             )

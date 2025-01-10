@@ -1,18 +1,13 @@
 const Fizzbuzz = (N) => {
       for (let i = 1; i <= N; i++) {
-            if (i % 3 === 0 && i % 5 === 0) {
-                  console.log('FizzBuzz')
-                  continue
-            }
+            let str = ''
             if (i % 3 === 0) {
-                  console.log('Fizz')
-                  continue
+                  str += 'Fizz'
             }
             if (i % 5 === 0) {
-                  console.log('Buzz')
-                  continue
+                  str += 'Buzz'
             }
-            console.log(i)
+            console.log(str || i)
       }
 }
 
